@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:19:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/29 11:05:23 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/17 20:58:11 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	raytracing(t_world *world)
 	int		j;
 	int		color;
 	t_ray	ray;
-	int x;
-	int y;
+	int		x;
+	int		y;
 
 	i = 0;
 	ray.start = world->cameras->pos;
@@ -47,13 +47,11 @@ void	raytracing(t_world *world)
 		while (j < world->screen_height)
 		{
 			color = raytrace_pixel(ray, world, i, j);
-			x=i-1;
-			while(++x < i + world->mosaic_size
-				&& x < world->screen_width)
+			x = i - 1;
+			while (++x < i + world->mosaic_size && x < world->screen_width)
 			{
-				y=j-1;
-				while(++y < j + world->mosaic_size
-					&& y < world->screen_height)
+				y = j - 1;
+				while (++y < j + world->mosaic_size && y < world->screen_height)
 				{
 					my_mlx_pixel_put(world, x, y, color);
 				}

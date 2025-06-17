@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 20:16:33 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/17 21:52:36 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,14 +145,15 @@ typedef struct s_world
 	int					screen_width;
 	int					screen_height;
 	t_camera			*cameras;
-	t_obj				*objects;
 	t_obj				*last_objects;
+	t_obj				*objects;
 	t_obj_array			obj_array;
 	t_bvh_node			*bvh;
 	t_color				ambient;
 	t_light				*lights;
 	int					mosaic_size;
 	t_input				input;
+	int					set_obj;
 }						t_world;
 
 // t_obj				*make_cylinder(t_vec pos, double dia, double height,

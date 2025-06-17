@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   free.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 22:22:02 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 19:51:24 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/17 19:44:50 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/17 20:37:08 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef FREE_H
+# define FREE_H
 
-# include "../color/color.h"
-# include "../libft/libft.h"
-# include "../vector/vec.h"
-# include "make_object/object.h"
+# include "../parser/make_object/object.h"
 
-int	paser(t_world *world, char *file);
+void	free_lights(t_light *lights);
+void	free_objects(t_obj *obj);
+void	free_world(t_world *world);
 
 #endif

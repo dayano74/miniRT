@@ -75,6 +75,11 @@ SRCS = main.c\
 		bvh/list_to_array.c\
 		bvh/sort_obj.c\
 		bvh/surro_box.c\
+		error/error_open.c\
+		error/error_malloc.c\
+		free/free_light.c\
+		free/free_objects.c\
+		free/free_world.c\
 
 OBJS = $(SRCS:.c=.o)
 

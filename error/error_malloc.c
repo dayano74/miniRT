@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   error_malloc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 22:22:02 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 19:51:24 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/17 20:31:01 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/17 20:37:29 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "../minirt.h"
 
-# include "../color/color.h"
-# include "../libft/libft.h"
-# include "../vector/vec.h"
-# include "make_object/object.h"
-
-int	paser(t_world *world, char *file);
-
-#endif
+void	error_malloc(void)
+{
+	ft_putstr_fd("malloc error\n", 2);
+	exit(1);
+}
