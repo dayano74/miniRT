@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:12:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 21:24:05 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:30:14 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	input_init(t_world *world)
 	world->input.moza_up = false;
 }
 
-void	window_init(t_world *world, char *file)
+void	window_init(t_world *world)
 {
 	world->screen_width = 1000;
 	world->screen_height = 1000;
@@ -52,15 +52,19 @@ void	window_init(t_world *world, char *file)
 	world->addr = mlx_get_data_addr(world->img, &world->bits_per_pixel,
 			&world->line_length, &world->endain);
 	input_init(world);
-	paser(world, file);
 }
 
 int	main(int argc, char *argv[])
 {
 	t_world	world;
 
-	(void)argc;
-	window_init(&world, argv[1]);
+	if (argc != 2)
+	{
+		ft_putstr_fd("./miniRT scenes/<file.rt>\n", 2);
+		exit(1);
+	}
+	window_init(&world);
+	parser(&world, argv[1]);
 	world.obj_array = list_to_array(world.objects);
 	world.bvh = build_bvh(world.obj_array.obj_array, 0, world.obj_array.count);
 	raytracing(&world);

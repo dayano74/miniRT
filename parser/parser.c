@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 21:25:06 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:24:38 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	check_set_obj(t_world *world)
 	}
 }
 
-int	paser(t_world *world, char *file)
+int	parser(t_world *world, char *file)
 {
 	int		fd;
 	char	*line;

@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes -g
 LDFLAGS = -lm
 
-MANDATORY = minirt
+MANDATORY = miniRT
 
 LIBFTDIR = ./libft
 LIBFT = $(LIBFTDIR)/libft.a
