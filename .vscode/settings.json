@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "vec.h": "c",
+        "minirt.h": "c",
+        "stdlib.h": "c"
+    }
+}
