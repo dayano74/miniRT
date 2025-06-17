@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/18 22:41:06 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 20:16:33 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_plane
 typedef struct s_cylinder
 {
 	t_vec				pos;
+	t_vec				axis;
 	double				dia;
 	double				height;
 	t_color				color;
