@@ -20,9 +20,6 @@ MANDATORY = minirt
 LIBFTDIR = ./libft
 LIBFT = $(LIBFTDIR)/libft.a
 
-PRINTFDIR = ./ft_printf
-PRINTF = $(PRINTFDIR)/libftprintf.a
-
 MLXDIR = ./mlx
 MLX = $(MLXDIR)/libmlx.a
 LMLX = -L$(MLXDIR) -lmlx -lXext -lX11
@@ -83,14 +80,11 @@ OBJS = $(SRCS:.c=.o)
 
 all: $(MANDATORY)
 
-$(MANDATORY): $(LIBFT) $(PRINTF) $(MLX) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) $(LMLX) $(LDFLAGS) -o $@
+$(MANDATORY): $(LIBFT) $(MLX) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LMLX) $(LDFLAGS) -o $@
 
 $(LIBFT):
 	make -C $(LIBFTDIR) bonus
-
-$(PRINTF):
-	make -C $(PRINTFDIR)
 
 $(MLX):
 	make -C $(MLXDIR)
@@ -104,13 +98,11 @@ run:all
 clean:
 	rm -f $(OBJS) 
 	make -C $(LIBFTDIR) clean
-	make -C $(PRINTFDIR) clean
 	make -C $(MLXDIR) clean
 
 fclean: clean
 	rm -f $(MANDATORY) 
 	make -C $(LIBFTDIR) fclean
-	make -C $(PRINTFDIR) fclean
 	make -C $(MLXDIR) clean
 
 re: fclean all
