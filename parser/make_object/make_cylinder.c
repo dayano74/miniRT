@@ -6,32 +6,36 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:54:46 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/16 22:08:02 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 21:12:05 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "object.h"
+#include "../../minirt.h"
 
-// t_obj	*make_cylinder(t_vec pos, double dia, double height, t_color color)
-// {
-// 	t_obj		*obj;
-// 	t_cylinder	cylinder;
-
-// 	obj = (t_obj *)malloc(sizeof(t_obj));
-// 	if (obj == NULL)
-// 		return (NULL);
-// 	cylinder.pos = pos;
-// 	cylinder.dia = dia;
-// 	cylinder.height = height;
-// 	cylinder.color = color;
-// 	obj->type = CYLINDER;
-// 	obj->u_object.cylinder = cylinder;
-// 	obj->next = NULL;
-// 	return (obj);
-// }
-
-void	make_cylinder(char **lines, t_world *world)
+void	make_cylinder(char **tokenlist, t_world *world)
 {
-	(void)lines;
-	(void)world;
+	t_obj		*obj;
+	t_cylinder	cylinder;
+
+	obj = (t_obj *)malloc(sizeof(t_obj));
+	if (obj == NULL)
+	{
+		ft_free_array(tokenlist);
+		free_world(world);
+		error_malloc();
+	}
+	cylinder.pos = token_to_vec(tokenlist[1]);
+	cylinder.axis = token_to_vec(tokenlist[2]);
+	cylinder.dia = ft_atof(tokenlist[3]);
+	cylinder.height = ft_atof(tokenlist[4]);
+	cylinder.color = token_to_color(tokenlist[5]);
+	obj->type = CYLINDER;
+	obj->u_object.cylinder = cylinder;
+	obj->next = NULL;
+	if (world->objects == NULL)
+		world->objects = obj;
+	else
+		world->last_objects->next = obj;
+	world->last_objects = obj;
+	world->set_obj |= 4;
 }

@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/18 22:41:06 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 21:10:09 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_plane
 typedef struct s_cylinder
 {
 	t_vec				pos;
+	t_vec				axis;
 	double				dia;
 	double				height;
 	t_color				color;
@@ -144,14 +145,15 @@ typedef struct s_world
 	int					screen_width;
 	int					screen_height;
 	t_camera			*cameras;
-	t_obj				*objects;
 	t_obj				*last_objects;
+	t_obj				*objects;
 	t_obj_array			obj_array;
 	t_bvh_node			*bvh;
 	t_color				ambient;
 	t_light				*lights;
 	int					mosaic_size;
 	t_input				input;
+	int					set_obj;
 }						t_world;
 
 // t_obj				*make_cylinder(t_vec pos, double dia, double height,

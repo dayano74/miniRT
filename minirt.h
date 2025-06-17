@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:43:06 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/19 21:57:44 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 20:33:42 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "bvh/bvh.h"
 # include "color/color.h"
+# include "error/error.h"
+# include "free/free.h"
 # include "insec_point/insec.h"
 # include "mlx/mlx.h"
 # include "parser/parser.h"
