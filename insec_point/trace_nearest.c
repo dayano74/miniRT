@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace_nearest.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:53:03 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 20:58:22 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/21 22:41:37 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ bool	trace_nearest_bvh(t_ray ray, t_bvh_node *node, t_insec *closest_hit)
 		t_min = -1.0;
 		while (obj)
 		{
+			printf("Checking object: type=%d\n", obj->type);
 			t = -1;
 			if (obj->type == SPHERE)
 				t = intersect_ray_sphere(ray, obj->u_object.sphere);
