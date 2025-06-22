@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/21 22:28:39 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/22 14:58:54 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,18 @@ t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
 	return norm;
 }
 
-// レイと円柱オブジェクトとの交差判定を行い、交差点までの距離（パラメータt）を取得する関数。
-// 交差していない場合、0を返す
+/*
+**  円柱とレイの最近交差距離を返す（ヒットなし→0）
+**
+**  前提： cylinder.pos   … 円柱高さの【中心点】
+**        cylinder.axis  … 単位ベクトル
+**        cylinder.dia   … 直径 (= 2r)
+**        cylinder.height… 全高
+*/
 double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 {
 	const double	r = cylinder.dia * 0.5;
 	const t_vec		n = cylinder.axis;
-	// t_vec n_raw = cylinder.axis;
-	// t_vec n     = vec_normalize(n_raw);
 	const t_vec		oc = vec_sub(ray.start, cylinder.pos);
 
 	printf("[DBG] axis=(%.3f, %.3f, %.3f) |axis|=%.3f  r=%.3f\n",
@@ -157,7 +161,8 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 			{
 				P = vec_add(ray.start, vec_mult(ray.dir, t_side));
 				h = vec_dot(vec_sub(P, cylinder.pos), n);
-				if (h < 0.0 || h > cylinder.height) /* はみ出し → 無効化 */
+				// if (h < 0.0 || h > cylinder.height * 0.5) /* はみ出し → 無効化 */
+				if (fabs(h) > cylinder.height * 0.5) /* はみ出し → 無効化 */
 					t_side = INF;
 				printf("[DBG] SIDE after height: t_side=%f  h=%f\n", t_side, h);
 			}
@@ -175,15 +180,17 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 	if (fabs(denom) > EPSILON)
 	{
 		/* 下キャップ (h = 0) */
-		t0 = -vec_dot(oc, n) / denom;
+		t_vec bottom = vec_sub(cylinder.pos, vec_mult(n, cylinder.height * 0.5));
+		t0 = vec_dot(vec_sub(bottom, ray.start), n) / denom;
 		if (t0 > EPSILON)
 		{
 			P0 = vec_add(ray.start, vec_mult(ray.dir, t0));
-			if (vec_dot(vec_sub(P0, cylinder.pos), vec_sub(P0, cylinder.pos)) <= r*r)
+			t_vec d0 = vec_sub(P0, bottom);
+			if (vec_dot(d0, d0) <= r*r)
 				t_cap = t0;
 		}
 		/* 上キャップ (h = cyl.height) */
-		topCenter = vec_add(cylinder.pos, vec_mult(n, cylinder.height));
+		topCenter = vec_add(cylinder.pos, vec_mult(n, cylinder.height * 0.5));
 		t_up = vec_dot(vec_sub(topCenter, ray.start), n) / denom;
 		if (t_up > EPSILON)
 		{
