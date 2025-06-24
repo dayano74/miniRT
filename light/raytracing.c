@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:19:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 20:58:11 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:33:02 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	raytrace_pixel(t_ray ray, t_world *world, int i, int j)
 	ray.dir = ray_dir(world, world->cameras, i, j);
 	if (!trace_nearest_bvh(ray, world->bvh, &insec))
 		return (0);
-	in_shadow(&insec, world->bvh, world->lights);
 	ambient = ambient_light(world->ambient, insec.color, insec.flag);
+	in_shadow(&insec, world->bvh, world->lights);
 	diffuse = diffuse_reflection(world->lights, insec, insec.type);
 	specular = specular_reflection(ray, insec, world->lights);
 	return (cal_color(ambient, diffuse, specular));

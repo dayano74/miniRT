@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:22:02 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 19:51:24 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:24:43 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 # include "../vector/vec.h"
 # include "make_object/object.h"
 
-int	paser(t_world *world, char *file);
+int	parser(t_world *world, char *file);
 
 #endif
