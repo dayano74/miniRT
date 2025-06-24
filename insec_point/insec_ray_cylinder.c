@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 19:15:02 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:06:44 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,6 @@
 // オブジェクトとの交点の法線ベクトルを計算する関数
 t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
 {
-	// t_cylinder	c;
-	// t_vec	d;
-	// t_vec	radial;
-	// t_vec	p;
-
-	// c = obj->u_object.cylinder;
-	// p = insec;
-	// d = vec_sub(p, c.pos);
-	// radial = vec_sub(d, vec_mult(c.axis, vec_dot(d, c.axis)));
-	// return (vec_normalize(radial));
 	/* ---------- 変数宣言 ---------- */
 	t_cylinder c;
 	t_vec      d;
@@ -105,7 +95,7 @@ t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
 	// 	insec.x, insec.y, insec.z,
 	// 	norm.x,  norm.y,  norm.z);
 	// fflush(stdout);
-	return norm;
+	return (norm);
 }
 
 /*
