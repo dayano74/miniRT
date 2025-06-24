@@ -10,5 +10,5 @@ make
 ```
 2. 実行
 ```
-./minirt scenes/<file.rt>
+./miniRT scenes/<file.rt>
 ```

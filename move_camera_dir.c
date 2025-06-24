@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:30:32 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/23 22:56:39 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/24 18:53:01 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,21 @@ t_vec	rotate_x(t_vec v, double angle)
 	return (r);
 }
 
+static void	move_view(t_camera *camera)
+{
+	t_vec	up;
+
+	up = vec_init(0, 1, 0);
+	if (vec_mag(vec_cross(up, camera->view)) < EPSILON)
+		up = vec_init(0, 0, 1);
+	camera->sx = vec_normalize(vec_cross(up, camera->view));
+	camera->sy = vec_normalize(vec_cross(camera->view, camera->sx));
+}
+
 void	look_right_left(t_world *world, int sign)
 {
 	world->cameras->view = rotate_y(world->cameras->view, 3.14 / 360 * sign);
+	move_view(world->cameras);
 	world->mosaic_size = 21;
 	raytracing(world);
 	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
@@ -44,6 +56,7 @@ void	look_right_left(t_world *world, int sign)
 void	look_up_down(t_world *world, int sign)
 {
 	world->cameras->view = rotate_x(world->cameras->view, 3.14 / 360 * sign);
+	move_view(world->cameras);
 	world->mosaic_size = 21;
 	raytracing(world);
 	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
