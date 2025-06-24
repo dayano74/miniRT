@@ -6,96 +6,80 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 20:06:44 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 22:11:47 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-// typedef struct s_cylinder
-// {
-// 	t_vec				pos;
-// 	t_vec				axis;
-// 	double				dia;
-// 	double				height;
-// 	t_color				color;
-// }						t_cylinder;
-
-// typedef struct s_obj
-// {
-// 	enum e_objtype		type;
-// 	union
-// 	{
-// 		t_sphere		sphere;
-// 		t_plane			plane;
-// 		t_cylinder		cylinder;
-// 		t_triangle		triangle;
-// 	} u_object;
-// 	t_aabb				box;
-// 	struct s_obj		*next;
-// }						t_obj;
-
-// typedef struct s_ray
-// {
-// 	t_vec				start;
-// 	t_vec				dir;
-// }						t_ray;
-
-
-// t_vec	vec_sub(t_vec v1, t_vec v2)
-// {
-// 	return ((t_vec){v1.x - v2.x, v1.y - v2.y, v1.z - v2.z});
-// }
-
-// t_vec	vec_mult(t_vec v, double k)
-// {
-// 	return ((t_vec){v.x * k, v.y * k, v.z * k});
-// }
-
-// // 内積
-// double	vec_dot(t_vec v1, t_vec v2)
-// {
-// 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
-// }
-
-// t_vec	vec_normalize(t_vec v)
-// {
-// 	double	mag;
-
-// 	mag = vec_mag(v);
-// 	return ((t_vec){v.x / mag, v.y / mag, v.z / mag});
-// }
-
 // オブジェクトとの交点の法線ベクトルを計算する関数
 t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
 {
-	/* ---------- 変数宣言 ---------- */
-	t_cylinder c;
-	t_vec      d;
-	t_vec      radial;
-	t_vec      norm;
+	// /* ---------- 変数宣言 ---------- */
+	// t_cylinder c;
+	// t_vec      d;
+	// t_vec      radial;
+	// t_vec      norm;
 
-	/* ---------- 値の取得 ---------- */
-	c = obj->u_object.cylinder;          /* 円柱データをコピー       */
-	d = vec_sub(insec, c.pos);           /* d = P - C                */
+	// /* ---------- 値の取得 ---------- */
+	// c = obj->u_object.cylinder;          /* 円柱データをコピー       */
+	// d = vec_sub(insec, c.pos);           /* d = P - C                */
 
-	/* ---------- 半径方向の抽出 ---------- */
-	radial = vec_sub(
-				d,
-				vec_mult(c.axis, vec_dot(d, c.axis))
-			);                          /* radial = d - n(d·n)      */
+	// /* ---------- 半径方向の抽出 ---------- */
+	// radial = vec_sub(
+	// 			d,
+	// 			vec_mult(c.axis, vec_dot(d, c.axis))
+	// 		);                          /* radial = d - n(d·n)      */
 
-	/* ---------- 正規化して法線に ---------- */
-	norm = vec_normalize(radial);
+	// /* ---------- 正規化して法線に ---------- */
+	// norm = vec_normalize(radial);
 
-	/* ---------- デバッグ出力 ---------- */
-	// printf("[DBG] NORMAL: "
-	// 	"P=(%.4f, %.4f, %.4f)  "
-	// 	"N=(%.4f, %.4f, %.4f)\n",
-	// 	insec.x, insec.y, insec.z,
-	// 	norm.x,  norm.y,  norm.z);
-	// fflush(stdout);
-	return (norm);
+	// /* ---------- デバッグ出力 ---------- */
+	// // printf("[DBG] NORMAL: "
+	// // 	"P=(%.4f, %.4f, %.4f)  "
+	// // 	"N=(%.4f, %.4f, %.4f)\n",
+	// // 	insec.x, insec.y, insec.z,
+	// // 	norm.x,  norm.y,  norm.z);
+	// // fflush(stdout);
+	// return (norm);
+
+
+	/* ---------- 1. 円柱データを取り出し & axis を正規化 ---------- */
+	t_cylinder c    = obj->u_object.cylinder;
+	t_vec      axis = vec_normalize(c.axis);          // 軸方向を単位ベクトルに
+	double     half_h = c.height * 0.5;               // 高さの半分
+
+	/* ---------- 2. 交点を円柱中心基準に変換 ---------- */
+	//  d = P - C(center)
+	t_vec d = vec_sub(insec, c.pos);
+
+	/* ---------- 3. 軸方向成分 h を計算 ---------- */
+	// h = d · axis  → -half_h…+half_h の範囲なら「側面」
+	double h = vec_dot(d, axis);
+
+	/* ---------- 4. キャップ判定 ---------- */
+	if (h >= half_h - EPSILON)
+	{
+		// 上キャップ：法線は +axis
+		return axis;
+	}
+	else if (h <= -half_h + EPSILON)
+	{
+		// 下キャップ：法線は -axis
+		return vec_mult(axis, -1);
+	}
+	/* ここまで来たら「側面」 */
+
+	/* ---------- 5. 側面の法線(radial)を計算 ---------- */
+	// 側面では、Pから軸方向の成分を引いたベクトルが半径方向になる
+	// radial = d - axis * (d·axis)
+	t_vec radial = vec_sub(
+		d,
+		vec_mult(axis, h)
+	);
+
+	/* ---------- 6. radial を正規化して返す ---------- */
+	return vec_normalize(radial);
 }
 
 /*
