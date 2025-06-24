@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   atof_with_error.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 19:41:23 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 20:22:28 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/24 20:31:44 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/24 21:52:13 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "../minirt.h"
 
-void	error_open(char *file);
-void	error_malloc(void);
-void	syntax_error(void);
+double	atof_with_error(char *str, double max, double min)
+{
+	double	num;
 
-#endif
+	num = ft_atof(str);
+	if (num > max || num < min)
+	{
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(" is invalid\n", 2);
+		exit(1);
+	}
+	return (num);
+}

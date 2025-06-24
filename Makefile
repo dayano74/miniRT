@@ -77,9 +77,13 @@ SRCS = main.c\
 		bvh/surro_box.c\
 		error/error_open.c\
 		error/error_malloc.c\
+		error/syntax_error.c\
 		free/free_light.c\
 		free/free_objects.c\
 		free/free_world.c\
+		utils/array_count.c\
+		utils/atof_with_error.c\
+		utils/atoi_with_error.c\
 
 OBJS = $(SRCS:.c=.o)
 

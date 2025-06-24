@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 19:15:52 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 21:50:03 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,25 @@ void	make_obj(char **lines, t_world *world)
 		make_sphere(lines, world);
 	else if (!ft_strcmp(lines[0], "tr"))
 		make_triangle(lines, world);
+	else if (ft_strcmp(lines[0], "\n"))
+	{
+		ft_putstr_fd("Error: ", 2);
+		ft_putstr_fd(lines[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_world(world);
+		exit(1);
+	}
 }
 
 void	print_no_set(char *obj, int *flag)
 {
 	ft_putstr_fd("Error: ", 2);
 	ft_putstr_fd(obj, 2);
-	ft_putstr_fd(" not set\n", 2);
+	ft_putstr_fd(" unset\n", 2);
 	*flag = 1;
 }
 
-void	check_set_obj(t_world *world)
+void	check_unset_obj(t_world *world)
 {
 	int	set_obj;
 	int	flag;
@@ -80,9 +88,10 @@ int	parser(t_world *world, char *file)
 		free(line);
 		if (lines == NULL)
 			return (free_world(world), error_malloc(), 1);
-		make_obj(lines, world);
+		if (lines[0] != NULL)
+			make_obj(lines, world);
 		ft_free_array(lines);
 	}
-	check_set_obj(world);
+	check_unset_obj(world);
 	return (0);
 }
