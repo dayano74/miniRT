@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_cylinder.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:54:46 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 21:12:05 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/24 22:00:37 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	make_cylinder(char **tokenlist, t_world *world)
 	cylinder.axis = token_to_vec(tokenlist[2]);
 	cylinder.dia = ft_atof(tokenlist[3]);
 	cylinder.height = ft_atof(tokenlist[4]);
-	cylinder.color = token_to_color(tokenlist[5]);
+	cylinder.color = color_normalize(token_to_color(tokenlist[5]));
 	obj->type = CYLINDER;
 	obj->u_object.cylinder = cylinder;
 	obj->next = NULL;

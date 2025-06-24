@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   make_camera.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:03:59 by okaname           #+#    #+#             */
 /*   Updated: 2025/06/24 21:38:12 by okaname          ###   ########.fr       */
@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../minirt.h"
+#include <math.h>
 
 #define FOV_MAX 180
 #define FOV_MIN 0

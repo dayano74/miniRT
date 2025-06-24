@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
 /*   Updated: 2025/06/24 21:50:03 by okaname          ###   ########.fr       */
@@ -77,11 +77,13 @@ int	parser(t_world *world, char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		error_open(file);
+	// printf("[DBG] opened %s = %d\n", file, fd); fflush(stdout);
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
+		// printf("[DBG] line: \"%s\"\n", line); fflush(stdout);
 		lines = ft_split(line, ' ');
 		free(line);
 		if (lines == NULL)

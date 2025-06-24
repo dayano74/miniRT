@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_aabb.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:44:18 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/23 22:46:49 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/22 14:22:51 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,25 @@ static t_aabb	get_aabb_plane(t_plane plane)
 	return (box);
 }
 
-// t_aabb	get_aabb_cylinder(t_cylinder cy)
-// {
-// 	t_vec	half_height;
-// 	t_vec	top;
-// 	t_vec	rvec;
-// 	t_aabb	top_box;
-// 	t_aabb	bottom_box;
-// 	t_vec	bottom;
+t_aabb	get_aabb_cylinder(t_cylinder cy)
+{
+	t_vec	half_height;
+	t_vec	top;
+	t_vec	rvec;
+	t_aabb	top_box;
+	t_aabb	bottom_box;
+	t_vec	bottom;
 
-// 	half_height = vec_mult(cy.normal, cy.height / 2.0);
-// 	top = vec_add(cy.pos, half_height);
-// 	bottom = vec_sub(cy.pos, half_height);
-// 	rvec = vec_init(cy.radius, cy.radius, cy.radius);
-// 	top_box = {.min = vec_sub(top, rvec), .max = vec_add(top, rvec)};
-// 	bottom_box = {.min = vec_sub(bottom, rvec), .max = vec_add(bottom, rvec)};
-// 	return (surrounding_box(top_box, bottom_box));
-// }
+	half_height = vec_mult(cy.axis, cy.height / 2.0);
+	top = vec_add(cy.pos, half_height);
+	bottom = vec_sub(cy.pos, half_height);
+	rvec = vec_init(cy.dia * 0.5, cy.dia * 0.5, cy.dia * 0.5);
+	top_box.min = vec_sub(top, rvec);
+	top_box.max = vec_add(top, rvec);
+	bottom_box.min = vec_sub(bottom, rvec);
+	bottom_box.max = vec_add(bottom, rvec);
+	return (surrounding_box(top_box, bottom_box));
+}
 
 static t_aabb	get_aabb_triangle(t_triangle tr)
 {
@@ -70,8 +72,8 @@ t_aabb	get_aabb(t_obj *obj)
 		return (get_aabb_sphere(obj->u_object.sphere));
 	if (obj->type == PLANE)
 		return (get_aabb_plane(obj->u_object.plane));
-	// if (obj->type == CYLINDER)
-	// 	return (get_aabb_cylinder(obj->u_object.cylinder));
+	if (obj->type == CYLINDER)
+		return (get_aabb_cylinder(obj->u_object.cylinder));
 	if (obj->type == TRIANGLE)
 		return (get_aabb_triangle(obj->u_object.triangle));
 	return ((t_aabb){vec_init(0, 0, 0), vec_init(0, 0, 0)});
