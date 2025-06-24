@@ -6,13 +6,14 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:44:15 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/17 00:53:58 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/24 19:07:43 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-t_color	diffuse_reflection(t_light *light, t_insec insec, int type)
+t_color	diffuse_reflection(t_light *light, t_insec insec, int type,
+		t_vec camera)
 {
 	t_vec	l;
 	double	r;
@@ -25,5 +26,8 @@ t_color	diffuse_reflection(t_light *light, t_insec insec, int type)
 		r = -r;
 	if (r < 0)
 		r = 0;
+	if (vec_dot(vec_sub(light->pos, insec.insec), insec.normal)
+		* vec_dot(insec.normal, vec_sub(camera, insec.insec)) < 0)
+		return (color_init(0, 0, 0));
 	return (color_mult(light->color, color_const_mult(insec.color, r)));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 18:00:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/29 11:07:02 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:04:47 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ bool	hit_aabb(t_ray ray, t_aabb box, double max_dist)
 	double	min;
 	double	max;
 	double	temp;
-	int i;
+	int		i;
 
 	tmin = 0.0;
 	tmax = max_dist;
-	i=-1;
-	while(++i<3)
+	i = -1;
+	while (++i < 3)
 	{
 		double t0, t1;
 		origin = (&ray.start.x)[i];
@@ -83,12 +83,13 @@ static double	intersect_object(t_ray ray, t_obj *obj)
 			t = intersect_ray_triangle(ray, tmp->u_object.triangle);
 		if (t > 0 && (t_min < 0 || t < t_min))
 			t_min = t;
-		tmp= tmp->next;
+		tmp = tmp->next;
 	}
 	return (t_min);
 }
 
-bool	trace_shadow_bvh(t_ray ray, t_bvh_node *node, double max_dist)
+bool	trace_shadow_bvh(t_ray ray, t_bvh_node *node, double max_dist,
+		t_vec pos, t_insec *insec)
 {
 	double	t;
 
@@ -97,16 +98,20 @@ bool	trace_shadow_bvh(t_ray ray, t_bvh_node *node, double max_dist)
 	if (node->obj)
 	{
 		t = intersect_object(ray, node->obj);
+		if (vec_dot(ray.dir, insec->normal) * vec_dot(insec->normal,
+				vec_sub(pos, insec->insec)) < 0)
+			return (false);
 		return (t > EPSILON && t < max_dist);
 	}
-	if (trace_shadow_bvh(ray, node->left, max_dist))
+	if (trace_shadow_bvh(ray, node->left, max_dist, pos, insec))
 		return (true);
-	if (trace_shadow_bvh(ray, node->right, max_dist))
+	if (trace_shadow_bvh(ray, node->right, max_dist, pos, insec))
 		return (true);
 	return (false);
 }
 
-void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light)
+void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light,
+		t_camera *camera)
 {
 	t_ray	ray;
 	double	light_dist;
@@ -114,6 +119,6 @@ void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light)
 	ray.dir = vec_normalize(vec_sub(light->pos, insec->insec));
 	ray.start = vec_add(insec->insec, vec_mult(ray.dir, EPSILON));
 	light_dist = vec_mag(vec_sub(light->pos, insec->insec));
-	if (trace_shadow_bvh(ray, bvh, light_dist))
+	if (trace_shadow_bvh(ray, bvh, light_dist, camera->pos, insec))
 		insec->flag = 0;
 }

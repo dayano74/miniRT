@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:43:06 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 20:33:42 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/24 19:07:58 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,17 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define EPSILON 0.0001
+# define EPSILON 0.000001
 
 t_color	ambient_light(t_color ambient, t_color obj, int flag);
-t_color	diffuse_reflection(t_light *light, t_insec insec, int type);
+t_color	diffuse_reflection(t_light *light, t_insec insec, int type,
+			t_vec camera);
 t_color	specular_reflection(t_ray ray, t_insec insec, t_light *light);
 void	raytracing(t_world *world);
 void	my_mlx_pixel_put(t_world *world, int x, int y, int color);
 t_vec	ray_dir(t_world *world, t_camera *camera, int i, int j);
-void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light);
+void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light,
+			t_camera *camera);
 bool	trace_nearest_bvh(t_ray ray, t_bvh_node *node, t_insec *closest_hit);
 
 void	setup_hooks(t_world *world);
