@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:53:03 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/22 15:37:09 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:22:09 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ bool	trace_nearest_bvh(t_ray ray, t_bvh_node *node, t_insec *closest_hit)
 	// 		ray.dir.x, ray.dir.y, ray.dir.z);
 	// fflush(stdout);
 	if (!intersect_ray_aabb(ray, node->box))
-		return (printf("[DBG] AABB miss\n"), false);
+		return (false);
 	// printf("[DBG] AABB hit: box min=(%.3f, %.3f, %.3f) max=(%.3f, %.3f, %.3f)\n",
 	// 	node->box.min.x, node->box.min.y, node->box.min.z,
 	// 	node->box.max.x, node->box.max.y, node->box.max.z);
@@ -103,17 +103,17 @@ bool	trace_nearest_bvh(t_ray ray, t_bvh_node *node, t_insec *closest_hit)
 		closest_hit->flag = 0;
 		t_min = -1.0;
 		// CYLINDER のデバッグ出力
-		if (obj->type == CYLINDER)
-			printf("[DBG] CYLINDER: pos=(%.3f, %.3f, %.3f) axis=(%.3f, %.3f, %.3f) dia=%.3f height=%.3f\n",
-				obj->u_object.cylinder.pos.x,
-				obj->u_object.cylinder.pos.y,
-				obj->u_object.cylinder.pos.z,
-				obj->u_object.cylinder.axis.x,
-				obj->u_object.cylinder.axis.y,
-				obj->u_object.cylinder.axis.z,
-				obj->u_object.cylinder.dia,
-				obj->u_object.cylinder.height);
-		printf("Checking object: type=%d\n", obj->type);
+		// if (obj->type == CYLINDER)
+		// 	printf("[DBG] CYLINDER: pos=(%.3f, %.3f, %.3f) axis=(%.3f, %.3f, %.3f) dia=%.3f height=%.3f\n",
+		// 		obj->u_object.cylinder.pos.x,
+		// 		obj->u_object.cylinder.pos.y,
+		// 		obj->u_object.cylinder.pos.z,
+		// 		obj->u_object.cylinder.axis.x,
+		// 		obj->u_object.cylinder.axis.y,
+		// 		obj->u_object.cylinder.axis.z,
+		// 		obj->u_object.cylinder.dia,
+		// 		obj->u_object.cylinder.height);
+		// printf("Checking object: type=%d\n", obj->type);
 
 		while (obj)
 		{

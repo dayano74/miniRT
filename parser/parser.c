@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 18:37:33 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:15:52 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int	parser(t_world *world, char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		error_open(file);
-	printf("[DBG] opened %s = %d\n", file, fd); fflush(stdout);
+	// printf("[DBG] opened %s = %d\n", file, fd); fflush(stdout);
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-		printf("[DBG] line: \"%s\"\n", line); fflush(stdout);
+		// printf("[DBG] line: \"%s\"\n", line); fflush(stdout);
 		lines = ft_split(line, ' ');
 		free(line);
 		if (lines == NULL)

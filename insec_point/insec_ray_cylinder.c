@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/22 14:58:54 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:15:02 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
 	norm = vec_normalize(radial);
 
 	/* ---------- デバッグ出力 ---------- */
-	printf("[DBG] NORMAL: "
-		"P=(%.4f, %.4f, %.4f)  "
-		"N=(%.4f, %.4f, %.4f)\n",
-		insec.x, insec.y, insec.z,
-		norm.x,  norm.y,  norm.z);
-	fflush(stdout);
+	// printf("[DBG] NORMAL: "
+	// 	"P=(%.4f, %.4f, %.4f)  "
+	// 	"N=(%.4f, %.4f, %.4f)\n",
+	// 	insec.x, insec.y, insec.z,
+	// 	norm.x,  norm.y,  norm.z);
+	// fflush(stdout);
 	return norm;
 }
 
@@ -122,11 +122,11 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 	const t_vec		n = cylinder.axis;
 	const t_vec		oc = vec_sub(ray.start, cylinder.pos);
 
-	printf("[DBG] axis=(%.3f, %.3f, %.3f) |axis|=%.3f  r=%.3f\n",
-	       n.x, n.y, n.z,
-	       sqrt(vec_dot(n, n)),   /* ← 軸ベクトルの長さ           */
-	       r);                    /* ← 半径                       */
-	fflush(stdout);
+	// printf("[DBG] axis=(%.3f, %.3f, %.3f) |axis|=%.3f  r=%.3f\n",
+	//        n.x, n.y, n.z,
+	//        sqrt(vec_dot(n, n)),   /* ← 軸ベクトルの長さ           */
+	//        r);                    /* ← 半径                       */
+	// fflush(stdout);
 	/* ---------- ① 側面との交差 (二次方程式) ---------- */
 	const t_vec	dxn = vec_cross(ray.dir, n);
 	const t_vec	ocxn = vec_cross(oc, n);
@@ -145,13 +145,13 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 	if (A > EPSILON)
 	{
 		disc = B*B - 4*A*C; /* 判別式 */
-		printf("[DBG] SIDE: A=%f B=%f C=%f disc=%f\n", A, B, C, disc);
+		// printf("[DBG] SIDE: A=%f B=%f C=%f disc=%f\n", A, B, C, disc);
 		if (disc >= 0.0)
 		{
 			sqrtD = sqrt(disc);
 			t1 = (-B - sqrtD) / (2*A);
 			t2 = (-B + sqrtD) / (2*A);
-			printf("[DBG] SIDE roots: t1=%f  t2=%f\n", t1, t2);
+			// printf("[DBG] SIDE roots: t1=%f  t2=%f\n", t1, t2);
 			if (t1 > EPSILON)
 				t_side = t1;
 			if (t2 > EPSILON && t2 < t_side)
@@ -164,7 +164,7 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 				// if (h < 0.0 || h > cylinder.height * 0.5) /* はみ出し → 無効化 */
 				if (fabs(h) > cylinder.height * 0.5) /* はみ出し → 無効化 */
 					t_side = INF;
-				printf("[DBG] SIDE after height: t_side=%f  h=%f\n", t_side, h);
+				// printf("[DBG] SIDE after height: t_side=%f  h=%f\n", t_side, h);
 			}
 		}
 	}
@@ -198,12 +198,12 @@ double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 			if (vec_dot(vec_sub(P1, topCenter), vec_sub(P1, topCenter)) <= r*r)
 				if (t_up < t_cap) t_cap = t_up;
 		}
-		printf("[DBG] CAP: denom=%f  t0=%f  t_up=%f  t_cap=%f\n", denom, t0, t_up, t_cap);
+		// printf("[DBG] CAP: denom=%f  t0=%f  t_up=%f  t_cap=%f\n", denom, t0, t_up, t_cap);
 	}
 
 	/* ---------- ③ 最も近いヒットを返す ---------- */
 	double t_hit;
 	t_hit = (t_side < t_cap) ? t_side : t_cap;
-	printf("[DBG] RESULT: t_side=%f  t_cap=%f  t_hit=%f\n", t_side, t_cap, t_hit);
+	// printf("[DBG] RESULT: t_side=%f  t_cap=%f  t_hit=%f\n", t_side, t_cap, t_hit);
 	return (t_hit == INF) ? 0.0 : t_hit;
 }
