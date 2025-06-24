@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   array_count.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 19:41:23 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 20:22:28 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/24 20:24:04 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/24 20:26:18 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "../minirt.h"
 
-void	error_open(char *file);
-void	error_malloc(void);
-void	syntax_error(void);
+int	array_count(char **array)
+{
+	int	i;
 
-#endif
+	i = 0;
+	while (array[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
+}
