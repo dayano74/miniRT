@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/21 22:37:55 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/24 18:37:33 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	check_set_obj(t_world *world)
 	}
 }
 
-int	paser(t_world *world, char *file)
+int	parser(t_world *world, char *file)
 {
 	int		fd;
 	char	*line;
