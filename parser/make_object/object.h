@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 20:16:02 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/28 22:29:17 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,41 @@ typedef struct s_cylinder
 	double				height;
 	t_color				color;
 }						t_cylinder;
+
+typedef struct s_cylinder_side_calc
+{
+	double				radius;
+	t_vec				n;
+	t_vec				oc;
+	t_vec				dxn;
+	t_vec				ocxn;
+	double				half_height;
+	double				a;
+	double				b;
+	double				c;
+	double				disc;
+	double				sqrt_disc;
+	double				t1;
+	double				t2;
+	t_vec				P;
+	double				h;
+}						t_cylinder_side_calc;
+
+typedef struct s_cylinder_cap_calc
+{
+	double				r;
+	t_vec				n;
+	double				dot;
+	double 				btm_t;
+	double				top_t;
+	t_vec				btm_hp;
+	t_vec				btm_ctr;
+	t_vec				btm_dist;
+	t_vec				top_hp;
+	t_vec				top_ctr;
+	t_vec				top_dist;
+	double				top_dist_sq;
+}						t_cylinder_cap_calc;
 
 typedef struct s_triangle
 {
