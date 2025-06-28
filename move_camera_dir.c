@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:30:32 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 18:53:01 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/28 22:52:40 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,10 @@ t_vec	rotate_y(t_vec v, double angle)
 	return (r);
 }
 
-t_vec	rotate_x(t_vec v, double angle)
+t_vec	tilt_up_down(t_vec v, double angle)
 {
-	t_vec	r;
-
-	r.y = cos(angle) * v.y + sin(angle) * v.z;
-	r.x = v.x;
-	r.z = -sin(angle) * v.y + cos(angle) * v.z;
-	return (r);
+	v.y += angle;
+	return (v);
 }
 
 static void	move_view(t_camera *camera)
@@ -55,7 +51,7 @@ void	look_right_left(t_world *world, int sign)
 
 void	look_up_down(t_world *world, int sign)
 {
-	world->cameras->view = rotate_x(world->cameras->view, 3.14 / 360 * sign);
+	world->cameras->view = tilt_up_down(world->cameras->view, 0.5 * sign);
 	move_view(world->cameras);
 	world->mosaic_size = 21;
 	raytracing(world);

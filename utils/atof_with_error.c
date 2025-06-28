@@ -6,22 +6,20 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 20:31:44 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 21:52:13 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/28 21:40:54 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-double	atof_with_error(char *str, double max, double min)
+bool	atof_with_error(char *str, double max, double min, double *num)
 {
-	double	num;
-
-	num = ft_atof(str);
-	if (num > max || num < min)
+	*num = ft_atof(str);
+	if (*num > max || *num < min)
 	{
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(" is invalid\n", 2);
-		exit(1);
+		return (false);
 	}
-	return (num);
+	return (true);
 }

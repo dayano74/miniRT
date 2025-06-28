@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 20:16:02 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/28 21:40:07 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,6 @@ void					make_camera(char **tokenlist, t_world *world);
 void					make_light(char **tokenlist, t_world *world);
 
 t_vec					token_to_vec(char *token);
-t_color					token_to_color(char *token);
+bool					token_to_color(char *token, t_color *color);
 
 #endif
