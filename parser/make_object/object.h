@@ -59,7 +59,7 @@ typedef struct s_cylinder_side_calc
 	t_vec				oc;
 	t_vec				dxn;
 	t_vec				ocxn;
-	double				half_height;
+// Removed the unused half_height field to avoid confusion.
 	double				a;
 	double				b;
 	double				c;
