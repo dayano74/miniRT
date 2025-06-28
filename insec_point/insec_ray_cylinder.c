@@ -6,178 +6,114 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 22:11:47 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/28 22:36:51 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-// オブジェクトとの交点の法線ベクトルを計算する関数
-t_vec	get_cylinder_normal(t_vec insec, t_obj *obj)
+t_cylinder_side_calc	init_cyl_side_calc(t_ray ray, t_cylinder cylinder)
 {
-	// /* ---------- 変数宣言 ---------- */
-	// t_cylinder c;
-	// t_vec      d;
-	// t_vec      radial;
-	// t_vec      norm;
+	t_cylinder_side_calc	calc;
 
-	// /* ---------- 値の取得 ---------- */
-	// c = obj->u_object.cylinder;          /* 円柱データをコピー       */
-	// d = vec_sub(insec, c.pos);           /* d = P - C                */
-
-	// /* ---------- 半径方向の抽出 ---------- */
-	// radial = vec_sub(
-	// 			d,
-	// 			vec_mult(c.axis, vec_dot(d, c.axis))
-	// 		);                          /* radial = d - n(d·n)      */
-
-	// /* ---------- 正規化して法線に ---------- */
-	// norm = vec_normalize(radial);
-
-	// /* ---------- デバッグ出力 ---------- */
-	// // printf("[DBG] NORMAL: "
-	// // 	"P=(%.4f, %.4f, %.4f)  "
-	// // 	"N=(%.4f, %.4f, %.4f)\n",
-	// // 	insec.x, insec.y, insec.z,
-	// // 	norm.x,  norm.y,  norm.z);
-	// // fflush(stdout);
-	// return (norm);
-
-
-	/* ---------- 1. 円柱データを取り出し & axis を正規化 ---------- */
-	t_cylinder c    = obj->u_object.cylinder;
-	t_vec      axis = vec_normalize(c.axis);          // 軸方向を単位ベクトルに
-	double     half_h = c.height * 0.5;               // 高さの半分
-
-	/* ---------- 2. 交点を円柱中心基準に変換 ---------- */
-	//  d = P - C(center)
-	t_vec d = vec_sub(insec, c.pos);
-
-	/* ---------- 3. 軸方向成分 h を計算 ---------- */
-	// h = d · axis  → -half_h…+half_h の範囲なら「側面」
-	double h = vec_dot(d, axis);
-
-	/* ---------- 4. キャップ判定 ---------- */
-	if (h >= half_h - EPSILON)
-	{
-		// 上キャップ：法線は +axis
-		return axis;
-	}
-	else if (h <= -half_h + EPSILON)
-	{
-		// 下キャップ：法線は -axis
-		return vec_mult(axis, -1);
-	}
-	/* ここまで来たら「側面」 */
-
-	/* ---------- 5. 側面の法線(radial)を計算 ---------- */
-	// 側面では、Pから軸方向の成分を引いたベクトルが半径方向になる
-	// radial = d - axis * (d·axis)
-	t_vec radial = vec_sub(
-		d,
-		vec_mult(axis, h)
-	);
-
-	/* ---------- 6. radial を正規化して返す ---------- */
-	return vec_normalize(radial);
+	calc.radius = cylinder.dia * 0.5;
+	calc.n = vec_normalize(cylinder.axis);
+	calc.oc = vec_sub(ray.start, cylinder.pos);
+	calc.dxn = vec_cross(ray.dir, calc.n);
+	calc.ocxn = vec_cross(calc.oc, calc.n);
+	calc.a = vec_dot(calc.dxn, calc.dxn);
+	calc.b = 2.0 * vec_dot(calc.dxn, calc.ocxn);
+	calc.c = vec_dot(calc.ocxn, calc.ocxn) - calc.radius * calc.radius;
+	return (calc);
 }
 
-/*
-**  円柱とレイの最近交差距離を返す（ヒットなし→0）
-**
-**  前提： cylinder.pos   … 円柱高さの【中心点】
-**        cylinder.axis  … 単位ベクトル
-**        cylinder.dia   … 直径 (= 2r)
-**        cylinder.height… 全高
-*/
-double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
+double	intersect_ray_cyl_side(t_ray ray, t_cylinder cylinder, double t_side)
 {
-	const double	r = cylinder.dia * 0.5;
-	const t_vec		n = cylinder.axis;
-	const t_vec		oc = vec_sub(ray.start, cylinder.pos);
+	t_cylinder_side_calc	calc;
 
-	// printf("[DBG] axis=(%.3f, %.3f, %.3f) |axis|=%.3f  r=%.3f\n",
-	//        n.x, n.y, n.z,
-	//        sqrt(vec_dot(n, n)),   /* ← 軸ベクトルの長さ           */
-	//        r);                    /* ← 半径                       */
-	// fflush(stdout);
-	/* ---------- ① 側面との交差 (二次方程式) ---------- */
-	const t_vec	dxn = vec_cross(ray.dir, n);
-	const t_vec	ocxn = vec_cross(oc, n);
-	const double	A = vec_dot(dxn, dxn);
-	const double	B = 2.0 * vec_dot(dxn, ocxn);
-	const double	C = vec_dot(ocxn, ocxn) - r*r;
-
-	double t_side = INF;
-
-	double	disc;
-	double	sqrtD;
-	double	t1;
-	double	t2;
-	t_vec	P;
-	double	h;
-	if (A > EPSILON)
+	calc = init_cyl_side_calc(ray, cylinder);
+	if (calc.a > EPSILON)
 	{
-		disc = B*B - 4*A*C; /* 判別式 */
-		// printf("[DBG] SIDE: A=%f B=%f C=%f disc=%f\n", A, B, C, disc);
-		if (disc >= 0.0)
+		calc.disc = calc.b * calc.b - 4.0 * calc.a * calc.c;
+		if (calc.disc >= 0.0)
 		{
-			sqrtD = sqrt(disc);
-			t1 = (-B - sqrtD) / (2*A);
-			t2 = (-B + sqrtD) / (2*A);
-			// printf("[DBG] SIDE roots: t1=%f  t2=%f\n", t1, t2);
-			if (t1 > EPSILON)
-				t_side = t1;
-			if (t2 > EPSILON && t2 < t_side)
-				t_side = t2;
-			/* 有限円柱の高さチェック */
+			calc.sqrt_disc = sqrt(calc.disc);
+			calc.t1 = (-calc.b - calc.sqrt_disc) / (2.0 * calc.a);
+			calc.t2 = (-calc.b + calc.sqrt_disc) / (2.0 * calc.a);
+			if (calc.t1 > EPSILON)
+				t_side = calc.t1;
+			if (calc.t2 > EPSILON && calc.t2 < t_side)
+				t_side = calc.t2;
 			if (t_side != INF)
 			{
-				P = vec_add(ray.start, vec_mult(ray.dir, t_side));
-				h = vec_dot(vec_sub(P, cylinder.pos), n);
-				// if (h < 0.0 || h > cylinder.height * 0.5) /* はみ出し → 無効化 */
-				if (fabs(h) > cylinder.height * 0.5) /* はみ出し → 無効化 */
+				calc.P = vec_add(ray.start, vec_mult(ray.dir, t_side));
+				calc.h = vec_dot(vec_sub(calc.P, cylinder.pos), calc.n);
+				if (fabs(calc.h) > cylinder.height * 0.5)
 					t_side = INF;
-				// printf("[DBG] SIDE after height: t_side=%f  h=%f\n", t_side, h);
 			}
 		}
 	}
+	return (t_side);
+}
 
-	/* ---------- ② 上下キャップとの交差 (円ディスク) ---------- */
-	double	t_cap = INF;
-	double	denom = vec_dot(ray.dir, n);
-	double	t0;
-	t_vec	P0;
-	t_vec	topCenter;
-	double	t_up;
-	t_vec	P1;
-	if (fabs(denom) > EPSILON)
+t_cylinder_cap_calc	init_cyl_cap_calc(t_ray ray, t_cylinder cyl)
+{
+	t_cylinder_cap_calc	calc;
+
+	calc.r = cyl.dia * 0.5;
+	calc.n = vec_normalize(cyl.axis);
+	calc.dot = vec_dot(ray.dir, calc.n);
+	calc.btm_ctr = vec_sub(cyl.pos, vec_mult(calc.n, cyl.height * 0.5));
+	calc.btm_t = vec_dot(vec_sub(calc.btm_ctr, ray.start), calc.n) / calc.dot;
+	calc.top_ctr = vec_add(cyl.pos, vec_mult(calc.n, cyl.height * 0.5));
+	calc.top_t = vec_dot(vec_sub(calc.top_ctr, ray.start), calc.n) / calc.dot;
+	calc.top_dist = (t_vec){0, 0, 0};
+	calc.top_dist_sq = 0.0;
+	return (calc);
+}
+
+double	intersect_ray_cylinder_cap(t_ray ray, t_cylinder cyl, double t_cap)
+{
+	t_cylinder_cap_calc	calc;
+
+	calc = init_cyl_cap_calc(ray, cyl);
+	if (fabs(calc.dot) > EPSILON)
 	{
-		/* 下キャップ (h = 0) */
-		t_vec bottom = vec_sub(cylinder.pos, vec_mult(n, cylinder.height * 0.5));
-		t0 = vec_dot(vec_sub(bottom, ray.start), n) / denom;
-		if (t0 > EPSILON)
+		if (calc.btm_t > EPSILON)
 		{
-			P0 = vec_add(ray.start, vec_mult(ray.dir, t0));
-			t_vec d0 = vec_sub(P0, bottom);
-			if (vec_dot(d0, d0) <= r*r)
-				t_cap = t0;
+			calc.btm_hp = vec_add(ray.start, vec_mult(ray.dir, calc.btm_t));
+			calc.btm_dist = vec_sub(calc.btm_hp, calc.btm_ctr);
+			if (vec_dot(calc.btm_dist, calc.btm_dist) <= calc.r * calc.r)
+				t_cap = calc.btm_t;
 		}
-		/* 上キャップ (h = cyl.height) */
-		topCenter = vec_add(cylinder.pos, vec_mult(n, cylinder.height * 0.5));
-		t_up = vec_dot(vec_sub(topCenter, ray.start), n) / denom;
-		if (t_up > EPSILON)
+		if (calc.top_t > EPSILON)
 		{
-			P1 = vec_add(ray.start, vec_mult(ray.dir, t_up));
-			if (vec_dot(vec_sub(P1, topCenter), vec_sub(P1, topCenter)) <= r*r)
-				if (t_up < t_cap) t_cap = t_up;
+			calc.top_hp = vec_add(ray.start, vec_mult(ray.dir, calc.top_t));
+			calc.top_dist = vec_sub(calc.top_hp, calc.top_ctr);
+			calc.top_dist_sq = vec_dot(calc.top_dist, calc.top_dist);
+			if (calc.top_dist_sq <= calc.r * calc.r && calc.top_t < t_cap)
+				t_cap = calc.top_t;
 		}
-		// printf("[DBG] CAP: denom=%f  t0=%f  t_up=%f  t_cap=%f\n", denom, t0, t_up, t_cap);
 	}
+	return (t_cap);
+}
 
-	/* ---------- ③ 最も近いヒットを返す ---------- */
-	double t_hit;
-	t_hit = (t_side < t_cap) ? t_side : t_cap;
-	// printf("[DBG] RESULT: t_side=%f  t_cap=%f  t_hit=%f\n", t_side, t_cap, t_hit);
-	return (t_hit == INF) ? 0.0 : t_hit;
+double	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
+{
+	double	t_side;
+	double	t_cap;
+	double	t_hit;
+
+	t_side = INF;
+	t_cap = INF;
+	t_side = intersect_ray_cyl_side(ray, cylinder, t_side);
+	t_cap = intersect_ray_cylinder_cap(ray, cylinder, t_cap);
+	if (t_side < t_cap)
+		t_hit = t_side;
+	else
+		t_hit = t_cap;
+	if (t_hit == INF)
+		return (0.0);
+	else
+		return (t_hit);
 }
