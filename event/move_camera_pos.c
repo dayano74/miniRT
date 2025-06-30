@@ -6,11 +6,11 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:04:01 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/18 22:23:45 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 09:34:52 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void	go_front(t_world *world)
 {

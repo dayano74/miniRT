@@ -25,10 +25,11 @@ MLX = $(MLXDIR)/libmlx.a
 LMLX = -L$(MLXDIR) -lmlx -lXext -lX11
 
 SRCS = main.c\
-		setup_hooks.c\
-		move_camera_pos.c\
-		move_camera_dir.c\
-		pixel_put.c\
+		event/setup_hooks.c\
+		event/move_camera_pos.c\
+		event/move_camera_dir.c\
+		event/pixel_put.c\
+		event/mozaic.c\
 		light/ambient_light.c\
 		light/diffuse_reflection.c\
 		light/specular_reflection.c\
@@ -77,13 +78,16 @@ SRCS = main.c\
 		bvh/surro_box.c\
 		error/error_open.c\
 		error/error_malloc.c\
-		error/syntax_error.c\
+		error/error_syntax.c\
+		error/error_invalid.c\
 		free/free_light.c\
 		free/free_objects.c\
 		free/free_world.c\
 		utils/array_count.c\
 		utils/atof_with_error.c\
 		utils/atoi_with_error.c\
+		utils/substitute.c\
+
 
 OBJS = $(SRCS:.c=.o)
 

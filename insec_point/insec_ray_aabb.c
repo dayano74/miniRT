@@ -6,82 +6,64 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 15:53:38 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/18 19:42:37 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:10:25 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "insec.h"
-#include <float.h> // DBL_EPSILON
-#include <math.h>
-#include <stdbool.h>
+#include "../minirt.h"
+
+static void	swap_double(double *n1, double *n2)
+{
+	double	tmp;
+
+	tmp = *n1;
+	*n1 = *n2;
+	*n2 = tmp;
+}
+
+static int	ray_in_side(t_ray_in_side *ris)
+{
+	if (fabs(*ris->ray_dir) < EPSILON)
+	{
+		if (*ris->ray_start < *ris->box_min || *ris->ray_start > *ris->box_max)
+			return (1);
+		*ris->tmin = -INFINITY;
+		*ris->tmax = INFINITY;
+	}
+	else
+	{
+		*ris->tmin = (*ris->box_min - *ris->ray_start) / *ris->ray_dir;
+		*ris->tmax = (*ris->box_max - *ris->ray_start) / *ris->ray_dir;
+		if (*ris->tmin > *ris->tmax)
+			swap_double(ris->tmin, ris->tmax);
+	}
+	return (0);
+}
 
 bool	intersect_ray_aabb(t_ray ray, t_aabb box)
 {
-	double			tmp;
-	const double	epsilon = 1e-8;
+	t_intersect_ray_aabb	var;
+	t_ray_in_side			ris;
 
-	double txmin, txmax, tymin, tymax, tzmin, tzmax;
-	if (fabs(ray.dir.x) < epsilon)
-	{
-		if (ray.start.x < box.min.x || ray.start.x > box.max.x)
-			return (false);
-		txmin = -INFINITY;
-		txmax = INFINITY;
-	}
-	else
-	{
-		txmin = (box.min.x - ray.start.x) / ray.dir.x;
-		txmax = (box.max.x - ray.start.x) / ray.dir.x;
-		if (txmin > txmax)
-		{
-			tmp = txmin;
-			txmin = txmax;
-			txmax = tmp;
-		}
-	}
-	if (fabs(ray.dir.y) < epsilon)
-	{
-		if (ray.start.y < box.min.y || ray.start.y > box.max.y)
-			return (false);
-		tymin = -INFINITY;
-		tymax = INFINITY;
-	}
-	else
-	{
-		tymin = (box.min.y - ray.start.y) / ray.dir.y;
-		tymax = (box.max.y - ray.start.y) / ray.dir.y;
-		if (tymin > tymax)
-		{
-			tmp = tymin;
-			tymin = tymax;
-			tymax = tmp;
-		}
-	}
-	if ((txmin > tymax) || (tymin > txmax))
+	ris = (t_ray_in_side){&ray.dir.x, &ray.start.x, &box.max.x, &box.min.x,
+		&var.txmax, &var.txmin};
+	if (ray_in_side(&ris))
 		return (false);
-	if (tymin > txmin)
-		txmin = tymin;
-	if (tymax < txmax)
-		txmax = tymax;
-	if (fabs(ray.dir.z) < epsilon)
-	{
-		if (ray.start.z < box.min.z || ray.start.z > box.max.z)
-			return (false);
-		tzmin = -INFINITY;
-		tzmax = INFINITY;
-	}
-	else
-	{
-		tzmin = (box.min.z - ray.start.z) / ray.dir.z;
-		tzmax = (box.max.z - ray.start.z) / ray.dir.z;
-		if (tzmin > tzmax)
-		{
-			tmp = tzmin;
-			tzmin = tzmax;
-			tzmax = tmp;
-		}
-	}
-	if ((txmin > tzmax) || (tzmin > txmax))
+	ris = (t_ray_in_side){&ray.dir.y, &ray.start.y, &box.max.y, &box.min.y,
+		&var.tymax, &var.tymin};
+	if (ray_in_side(&ris))
+		return (false);
+	if ((var.txmin > var.tymax) || (var.tymin > var.txmax))
+		return (false);
+	if (var.tymin > var.txmin)
+		var.txmin = var.tymin;
+	if (var.tymax < var.txmax)
+		var.txmax = var.tymax;
+	ris = (t_ray_in_side){&ray.dir.z, &ray.start.z, &box.max.z, &box.min.z,
+		&var.tzmax, &var.tzmin};
+	if (ray_in_side(&ris))
+		return (false);
+	if ((var.txmin > var.tzmax) || (var.tzmin > var.txmax))
 		return (false);
 	return (true);
 }

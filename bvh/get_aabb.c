@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_aabb.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:44:18 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/22 14:22:51 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/30 10:35:36 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,17 @@ static t_aabb	get_aabb_plane(t_plane plane)
 
 t_aabb	get_aabb_cylinder(t_cylinder cy)
 {
-	t_vec	half_height;
-	t_vec	top;
-	t_vec	rvec;
-	t_aabb	top_box;
-	t_aabb	bottom_box;
-	t_vec	bottom;
+	t_get_aabb_cylinder	var;
 
-	half_height = vec_mult(cy.axis, cy.height / 2.0);
-	top = vec_add(cy.pos, half_height);
-	bottom = vec_sub(cy.pos, half_height);
-	rvec = vec_init(cy.dia * 0.5, cy.dia * 0.5, cy.dia * 0.5);
-	top_box.min = vec_sub(top, rvec);
-	top_box.max = vec_add(top, rvec);
-	bottom_box.min = vec_sub(bottom, rvec);
-	bottom_box.max = vec_add(bottom, rvec);
-	return (surrounding_box(top_box, bottom_box));
+	var.half_height = vec_mult(cy.axis, cy.height / 2.0);
+	var.top = vec_add(cy.pos, var.half_height);
+	var.bottom = vec_sub(cy.pos, var.half_height);
+	var.rvec = vec_init(cy.dia * 0.5, cy.dia * 0.5, cy.dia * 0.5);
+	var.top_box.min = vec_sub(var.top, var.rvec);
+	var.top_box.max = vec_add(var.top, var.rvec);
+	var.bottom_box.min = vec_sub(var.bottom, var.rvec);
+	var.bottom_box.max = vec_add(var.bottom, var.rvec);
+	return (surrounding_box(var.top_box, var.bottom_box));
 }
 
 static t_aabb	get_aabb_triangle(t_triangle tr)

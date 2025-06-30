@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   trace_nearest.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:53:03 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 19:22:09 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/30 12:29:39 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 #include "insec.h"
+
+static void	substitute_color_normal(t_color *color1, t_color color2,
+		t_vec *vec1, t_vec vec2)
+{
+	*color1 = color2;
+	*vec1 = vec2;
+}
 
 static void	insec_info(t_ray ray, t_obj *obj, t_insec *insec, double t)
 {
@@ -19,140 +26,82 @@ static void	insec_info(t_ray ray, t_obj *obj, t_insec *insec, double t)
 	insec->t = t;
 	insec->insec = vec_add(ray.start, vec_mult(ray.dir, t));
 	if (obj->type == SPHERE)
-	{
-		insec->color = obj->u_object.sphere.color;
-		insec->normal = vec_sub(insec->insec, obj->u_object.sphere.pos);
-	}
+		substitute_color_normal(&(insec->color), obj->u_object.sphere.color,
+			&(insec->normal), vec_sub(insec->insec, obj->u_object.sphere.pos));
 	else if (obj->type == PLANE)
-	{
-		insec->color = obj->u_object.plane.color;
-		insec->normal = obj->u_object.plane.normal;
-	}
+		substitute_color_normal(&(insec->color), obj->u_object.plane.color,
+			&(insec->normal), obj->u_object.plane.normal);
 	else if (obj->type == CYLINDER)
-	{
-		insec->color = obj->u_object.cylinder.color;
-		insec->normal = get_cylinder_normal(insec->insec, obj);
-	}
+		substitute_color_normal(&(insec->color), obj->u_object.cylinder.color,
+			&(insec->normal), get_cylinder_normal(insec->insec, obj));
 	else if (obj->type == TRIANGLE)
-	{
-		insec->color = obj->u_object.triangle.color;
-		insec->normal = vec_cross(vec_sub(obj->u_object.triangle.p1,
+		substitute_color_normal(&(insec->color), obj->u_object.triangle.color,
+			&(insec->normal), vec_cross(vec_sub(obj->u_object.triangle.p1,
 					obj->u_object.triangle.p2),
-				vec_sub(obj->u_object.triangle.p1, obj->u_object.triangle.p3));
-	}
+				vec_sub(obj->u_object.triangle.p1, obj->u_object.triangle.p3)));
 	insec->normal = vec_normalize(insec->normal);
 	insec->type = obj->type;
 }
 
-// t_insec	trace_nearest(t_ray ray, t_obj *obj)
-// {
-// 	t_obj	*tmp;
-// 	t_insec	insec;
-// 	double	t_min;
-// 	double	t;
+static int	ray_hit_bvh(t_tnb *var, t_ray ray, t_bvh_node *node,
+		t_insec *closest_hit)
+{
+	var->obj = node->obj;
+	*closest_hit = (t_insec){0};
+	closest_hit->flag = 0;
+	var->t_min = -1.0;
+	while (var->obj)
+	{
+		var->t = -1;
+		if (var->obj->type == SPHERE)
+			var->t = intersect_ray_sphere(ray, var->obj->u_object.sphere);
+		else if (var->obj->type == PLANE)
+			var->t = intersect_ray_plane(ray, var->obj->u_object.plane);
+		else if (var->obj->type == CYLINDER)
+			var->t = intersect_ray_cylinder(ray, var->obj->u_object.cylinder);
+		else if (var->obj->type == TRIANGLE)
+			var->t = intersect_ray_triangle(ray, var->obj->u_object.triangle);
+		if (var->t > 0 && (var->t_min < 0 || var->t < var->t_min))
+		{
+			var->t_min = var->t;
+			insec_info(ray, var->obj, &var->temp_hit, var->t);
+			*closest_hit = var->temp_hit;
+		}
+		var->obj = var->obj->next;
+	}
+	return (closest_hit->flag == 1);
+}
 
-// 	tmp = obj;
-// 	t_min = -1.0;
-// 	insec.flag = 0;
-// 	while (tmp)
-// 	{
-// 		if (tmp->type == SPHERE)
-// 			t = intersect_ray_sphere(ray, tmp->u_object.sphere);
-// 		else if (tmp->type == PLANE)
-// 			t = intersect_ray_plane(ray, tmp->u_object.plane);
-// 		else if (tmp->type == CYLINDER)
-// 			t = intersect_ray_cylinder(ray, tmp->u_object.cylinder);
-// 		else if (tmp->type == TRIANGLE)
-// 			t = intersect_ray_triangle(ray, tmp->u_object.triangle);
-// 		if (t > 0 && (t_min < 0 || t < t_min))
-// 		{
-// 			t_min = t;
-// 			insec_info(ray, tmp, &insec, t_min);
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	return (insec);
-// }
+static void	substitute_bool(bool *hit_left, bool *hit_right)
+{
+	*hit_left = false;
+	*hit_right = false;
+}
 
 bool	trace_nearest_bvh(t_ray ray, t_bvh_node *node, t_insec *closest_hit)
 {
-	t_insec	left_hit;
-	t_insec	right_hit;
-	bool	hit_left;
-	bool	hit_right;
-	t_obj	*obj;
-	double	t_min;
-	t_insec	temp_hit;
-	double	t;
+	t_tnb	var;
 
-	// printf("[DBG] trace_nearest_bvh called\n");
-	// fflush(stdout);
-	// printf("[DBG] Ray dir = (%.3f, %.3f, %.3f)\n",
-	// 		ray.dir.x, ray.dir.y, ray.dir.z);
-	// fflush(stdout);
 	if (!intersect_ray_aabb(ray, node->box))
 		return (false);
-	// printf("[DBG] AABB hit: box min=(%.3f, %.3f, %.3f) max=(%.3f, %.3f, %.3f)\n",
-	// 	node->box.min.x, node->box.min.y, node->box.min.z,
-	// 	node->box.max.x, node->box.max.y, node->box.max.z);
-	// fflush(stdout);
 	if (node->left == NULL && node->right == NULL && node->obj != NULL)
-	{
-		obj = node->obj;
-		*closest_hit = (t_insec){0};
-		closest_hit->flag = 0;
-		t_min = -1.0;
-		// CYLINDER のデバッグ出力
-		// if (obj->type == CYLINDER)
-		// 	printf("[DBG] CYLINDER: pos=(%.3f, %.3f, %.3f) axis=(%.3f, %.3f, %.3f) dia=%.3f height=%.3f\n",
-		// 		obj->u_object.cylinder.pos.x,
-		// 		obj->u_object.cylinder.pos.y,
-		// 		obj->u_object.cylinder.pos.z,
-		// 		obj->u_object.cylinder.axis.x,
-		// 		obj->u_object.cylinder.axis.y,
-		// 		obj->u_object.cylinder.axis.z,
-		// 		obj->u_object.cylinder.dia,
-		// 		obj->u_object.cylinder.height);
-		// printf("Checking object: type=%d\n", obj->type);
-
-		while (obj)
-		{
-			t = -1;
-			if (obj->type == SPHERE)
-				t = intersect_ray_sphere(ray, obj->u_object.sphere);
-			else if (obj->type == PLANE)
-				t = intersect_ray_plane(ray, obj->u_object.plane);
-			else if (obj->type == CYLINDER)
-				t = intersect_ray_cylinder(ray, obj->u_object.cylinder);
-			else if (obj->type == TRIANGLE)
-				t = intersect_ray_triangle(ray, obj->u_object.triangle);
-			if (t > 0 && (t_min < 0 || t < t_min))
-			{
-				t_min = t;
-				insec_info(ray, obj, &temp_hit, t);
-				*closest_hit = temp_hit;
-			}
-			obj = obj->next;
-		}
-		return (closest_hit->flag == 1);
-	}
-	hit_left = false;
-	hit_right = false;
+		return (ray_hit_bvh(&var, ray, node, closest_hit));
+	substitute_bool(&var.hit_left, &var.hit_right);
 	if (node->left)
-		hit_left = trace_nearest_bvh(ray, node->left, &left_hit);
+		var.hit_left = trace_nearest_bvh(ray, node->left, &var.left_hit);
 	if (node->right)
-		hit_right = trace_nearest_bvh(ray, node->right, &right_hit);
-	if (hit_left && hit_right)
+		var.hit_right = trace_nearest_bvh(ray, node->right, &var.right_hit);
+	if (var.hit_left && var.hit_right)
 	{
-		if (left_hit.t < right_hit.t)
-			*closest_hit = left_hit;
+		if (var.left_hit.t < var.right_hit.t)
+			*closest_hit = var.left_hit;
 		else
-			*closest_hit = right_hit;
+			*closest_hit = var.right_hit;
 	}
-	else if (hit_left)
-		*closest_hit = left_hit;
-	else if (hit_right)
-		*closest_hit = right_hit;
+	else if (var.hit_left)
+		*closest_hit = var.left_hit;
+	else if (var.hit_right)
+		*closest_hit = var.right_hit;
 	else
 		return (false);
 	return (true);

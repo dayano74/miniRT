@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   substitute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 23:12:00 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 11:44:31 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/30 09:51:24 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/30 09:54:06 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minirt.h"
 
-void	ft_free_array(char **array)
+void	substitute(int *v1, int num1, int *v2, int num2)
 {
-	int	i;
-
-	i = 0;
-	if (array == NULL)
-		return ;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
+	*v1 = num1;
+	*v2 = num2;
 }

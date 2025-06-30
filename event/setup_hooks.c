@@ -6,11 +6,11 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:26:16 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/18 22:43:28 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 09:40:37 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 #define MINUSKEY 45
 #define EQUALKEY 61
@@ -23,36 +23,6 @@
 #define UPARROR 65362
 #define LEFTA0RROR 65363
 #define DOWNARROR 65364
-
-void	moza_down(t_world *world)
-{
-	if (world->screen_height - world->mosaic_size <= 5)
-		return ;
-	world->mosaic_size += 5;
-	raytracing(world);
-	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
-}
-
-void	moza_up(t_world *world)
-{
-	if (world->mosaic_size <= 5)
-		return ;
-	world->mosaic_size -= 5;
-	raytracing(world);
-	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
-}
-
-void	gradual_mosaic_reveal(t_world *world)
-{
-	if (world->mosaic_size > 1)
-	{
-		world->mosaic_size -= 4;
-		if (world->mosaic_size < 1)
-			world->mosaic_size = 1;
-		raytracing(world);
-		mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
-	}
-}
 
 int	update_loop(t_world *world)
 {

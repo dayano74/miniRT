@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:26:11 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/28 22:22:10 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:38:32 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	token_to_color(char *token, t_color *color)
 	if (rgb == NULL)
 		return (false);
 	if (array_count(rgb) != 3)
-		syntax_error();
+		return (false);
 	if (!atof_with_error(rgb[0], COLOR_MAX, COLOR_MIN, &(color->red))
 		|| !atof_with_error(rgb[1], COLOR_MAX, COLOR_MIN, &(color->green))
 		|| !atof_with_error(rgb[2], COLOR_MAX, COLOR_MIN, &(color->blue)))

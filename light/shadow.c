@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 18:00:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 19:04:47 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:08:21 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,47 @@
 #include "../minirt.h"
 #include <stdbool.h>
 
+static bool	hit_aabb2(t_hit_aabb *var)
+{
+	var->invd = 1.0 / var->dir;
+	var->t0 = (var->min - var->origin) * var->invd;
+	var->t1 = (var->max - var->origin) * var->invd;
+	if (var->invd < 0.0)
+	{
+		var->temp = var->t0;
+		var->t0 = var->t1;
+		var->t1 = var->temp;
+	}
+	if (var->t0 > var->tmin)
+		var->tmin = var->t0;
+	if (var->t1 < var->tmax)
+		var->tmax = var->t1;
+	if (var->tmax <= var->tmin)
+		return (false);
+	return (true);
+}
+
 bool	hit_aabb(t_ray ray, t_aabb box, double max_dist)
 {
-	double	tmin;
-	double	tmax;
-	double	invD;
-	double	origin;
-	double	dir;
-	double	min;
-	double	max;
-	double	temp;
-	int		i;
+	t_hit_aabb	var;
 
-	tmin = 0.0;
-	tmax = max_dist;
-	i = -1;
-	while (++i < 3)
+	var.tmin = 0.0;
+	var.tmax = max_dist;
+	var.i = -1;
+	while (++var.i < 3)
 	{
-		double t0, t1;
-		origin = (&ray.start.x)[i];
-		dir = (&ray.dir.x)[i];
-		min = (&box.min.x)[i];
-		max = (&box.max.x)[i];
-		if (dir == 0.0)
+		var.origin = (&ray.start.x)[var.i];
+		var.dir = (&ray.dir.x)[var.i];
+		var.min = (&box.min.x)[var.i];
+		var.max = (&box.max.x)[var.i];
+		if (var.dir == 0.0)
 		{
-			if (origin < min || origin > max)
+			if (var.origin < var.min || var.origin > var.max)
 				return (false);
 			else
 				continue ;
 		}
-		invD = 1.0 / dir;
-		t0 = (min - origin) * invD;
-		t1 = (max - origin) * invD;
-		if (invD < 0.0)
-		{
-			temp = t0;
-			t0 = t1;
-			t1 = temp;
-		}
-		if (t0 > tmin)
-			tmin = t0;
-		if (t1 < tmax)
-			tmax = t1;
-		if (tmax <= tmin)
+		if (!hit_aabb2(&var))
 			return (false);
 	}
 	return (true);
@@ -88,24 +86,30 @@ static double	intersect_object(t_ray ray, t_obj *obj)
 	return (t_min);
 }
 
-bool	trace_shadow_bvh(t_ray ray, t_bvh_node *node, double max_dist,
-		t_vec pos, t_insec *insec)
+static bool	trace_shadow_bvh(t_tsb *var)
 {
 	double	t;
+	t_tsb	left_var;
+	t_tsb	right_var;
 
-	if (!node || !hit_aabb(ray, node->box, max_dist))
+	if (!var->node || !hit_aabb(var->ray, var->node->box, var->max_dist))
 		return (false);
-	if (node->obj)
+	if (var->node->obj)
 	{
-		t = intersect_object(ray, node->obj);
-		if (vec_dot(ray.dir, insec->normal) * vec_dot(insec->normal,
-				vec_sub(pos, insec->insec)) < 0)
+		t = intersect_object(var->ray, var->node->obj);
+		if (vec_dot(var->ray.dir, var->insec->normal)
+			* vec_dot(var->insec->normal, vec_sub(var->pos,
+					var->insec->insec)) < 0)
 			return (false);
-		return (t > EPSILON && t < max_dist);
+		return (t > EPSILON && t < var->max_dist);
 	}
-	if (trace_shadow_bvh(ray, node->left, max_dist, pos, insec))
+	left_var = *var;
+	left_var.node = var->node->left;
+	if (trace_shadow_bvh(&left_var))
 		return (true);
-	if (trace_shadow_bvh(ray, node->right, max_dist, pos, insec))
+	right_var = *var;
+	right_var.node = var->node->right;
+	if (trace_shadow_bvh(&right_var))
 		return (true);
 	return (false);
 }
@@ -113,12 +117,14 @@ bool	trace_shadow_bvh(t_ray ray, t_bvh_node *node, double max_dist,
 void	in_shadow(t_insec *insec, t_bvh_node *bvh, t_light *light,
 		t_camera *camera)
 {
-	t_ray	ray;
-	double	light_dist;
+	t_tsb	var;
 
-	ray.dir = vec_normalize(vec_sub(light->pos, insec->insec));
-	ray.start = vec_add(insec->insec, vec_mult(ray.dir, EPSILON));
-	light_dist = vec_mag(vec_sub(light->pos, insec->insec));
-	if (trace_shadow_bvh(ray, bvh, light_dist, camera->pos, insec))
+	var.ray.dir = vec_normalize(vec_sub(light->pos, insec->insec));
+	var.ray.start = vec_add(insec->insec, vec_mult(var.ray.dir, EPSILON));
+	var.insec = insec;
+	var.node = bvh;
+	var.pos = camera->pos;
+	var.max_dist = vec_mag(vec_sub(light->pos, insec->insec));
+	if (trace_shadow_bvh(&var))
 		insec->flag = 0;
 }
