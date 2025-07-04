@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:12:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 22:30:14 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:35:38 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int	main(int argc, char *argv[])
 	mlx_put_image_to_window(world.mlx, world.win, world.img, 0, 0);
 	setup_hooks(&world);
 	mlx_loop(world.mlx);
+	free_world(&world);
 	return (0);
 }

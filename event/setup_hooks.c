@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:26:16 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 09:40:37 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:41:08 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,18 @@
 #define AKEY 97
 #define SKEY 115
 #define DKEY 100
+#define ESCAPEKEY 65307
 #define RIGHTARROR 65361
 #define UPARROR 65362
 #define LEFTA0RROR 65363
 #define DOWNARROR 65364
+
+static int _free_world_and_exit(t_world *world)
+{
+	free_world(world);
+	exit(0);
+	return (0);
+}
 
 int	update_loop(t_world *world)
 {
@@ -73,6 +81,8 @@ int	key_press(int keycode, t_world *world)
 		world->input.moza_down = true;
 	if (keycode == EQUALKEY)
 		world->input.moza_up = true;
+	if (keycode == ESCAPEKEY)
+		_free_world_and_exit(world);
 	return (0);
 }
 
@@ -105,5 +115,6 @@ void	setup_hooks(t_world *world)
 {
 	mlx_hook(world->win, 2, 1L << 0, key_press, world);
 	mlx_hook(world->win, 3, 1L << 1, key_release, world);
+	mlx_hook(world->win, 17, 0, _free_world_and_exit, world);
 	mlx_loop_hook(world->mlx, update_loop, world);
 }
