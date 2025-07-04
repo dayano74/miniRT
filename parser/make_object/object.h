@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 21:45:33 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/04 21:52:46 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_cylinder_side_calc
 	t_vec				oc;
 	t_vec				dxn;
 	t_vec				ocxn;
-// Removed the unused half_height field to avoid confusion.
 	double				a;
 	double				b;
 	double				c;
@@ -67,7 +66,7 @@ typedef struct s_cylinder_side_calc
 	double				sqrt_disc;
 	double				t1;
 	double				t2;
-	t_vec				P;
+	t_vec				p;
 	double				h;
 }						t_cylinder_side_calc;
 
@@ -76,7 +75,7 @@ typedef struct s_cylinder_cap_calc
 	double				r;
 	t_vec				n;
 	double				dot;
-	double 				btm_t;
+	double				btm_t;
 	double				top_t;
 	t_vec				btm_hp;
 	t_vec				btm_ctr;
