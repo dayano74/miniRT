@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/28 21:40:07 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 21:12:49 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,41 @@ typedef struct s_cylinder
 	double				height;
 	t_color				color;
 }						t_cylinder;
+
+typedef struct s_cylinder_side_calc
+{
+	double				radius;
+	t_vec				n;
+	t_vec				oc;
+	t_vec				dxn;
+	t_vec				ocxn;
+	// Removed the unused half_height field to avoid confusion.
+	double				a;
+	double				b;
+	double				c;
+	double				disc;
+	double				sqrt_disc;
+	double				t1;
+	double				t2;
+	t_vec				P;
+	double				h;
+}						t_cylinder_side_calc;
+
+typedef struct s_cylinder_cap_calc
+{
+	double				r;
+	t_vec				n;
+	double				dot;
+	double				btm_t;
+	double				top_t;
+	t_vec				btm_hp;
+	t_vec				btm_ctr;
+	t_vec				btm_dist;
+	t_vec				top_hp;
+	t_vec				top_ctr;
+	t_vec				top_dist;
+	double				top_dist_sq;
+}						t_cylinder_cap_calc;
 
 typedef struct s_triangle
 {
@@ -144,7 +179,7 @@ typedef struct s_world
 	int					endain;
 	int					screen_width;
 	int					screen_height;
-	t_camera			*cameras;
+	t_camera			*camera;
 	t_obj				*last_objects;
 	t_obj				*objects;
 	t_obj_array			obj_array;
@@ -155,16 +190,6 @@ typedef struct s_world
 	t_input				input;
 	int					set_obj;
 }						t_world;
-
-// t_obj				*make_cylinder(t_vec pos, double dia, double height,
-// 						t_color color);
-// t_obj				*make_plane(t_vec pos, t_vec normal, t_color color);
-// t_obj				*make_sphere(t_vec pos, double dia, t_color color);
-// t_obj				*make_triangle(t_vec p1, t_vec p2, t_vec p3,
-// t_color color);
-// t_camera			*make_camera(t_vec pos, t_vec dir, double fob, int width);
-// t_light				*make_light(t_vec pos, double brightness,
-// t_color color);
 
 void					make_ambient(char **tokenlist, t_world *world);
 void					make_cylinder(char **tokenlist, t_world *world);
