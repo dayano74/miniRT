@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:43:06 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 13:10:36 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:13:54 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include "parser/parser.h"
 # include "utils/utils.h"
 # include "vector/vec.h"
-# include <float.h>
 # include <math.h>
 # include <stdbool.h>
 # include <stdio.h>

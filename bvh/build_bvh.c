@@ -6,23 +6,11 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 15:02:54 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 10:28:38 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:10:24 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
-
-t_aabb	combine_aabbs(t_obj **objects, int start, int end)
-{
-	t_aabb	box;
-	int		i;
-
-	box = get_aabb(objects[start]);
-	i = start;
-	while (++i < end)
-		box = surrounding_box(box, get_aabb(objects[i]));
-	return (box);
-}
 
 float	surface_area(t_aabb box)
 {
@@ -32,32 +20,48 @@ float	surface_area(t_aabb box)
 	return (2 * (size.x * size.y + size.y * size.z + size.z * size.x));
 }
 
+void	cal_cost(t_obj **objects, int start, int end, t_cal_sah *sah)
+{
+	sort_obj(objects, start, end, sah->axis);
+	sah->prefix[0] = objects[start]->box;
+	sah->i = 0;
+	while (++sah->i < sah->n)
+		sah->prefix[sah->i] = surrounding_box(sah->prefix[sah->i - 1],
+				objects[start + sah->i]->box);
+	sah->surfix[sah->n - 1] = objects[end - 1]->box;
+	sah->i = sah->n - 1;
+	while (--sah->i >= 0)
+		sah->surfix[sah->i] = surrounding_box(objects[start + sah->i]->box,
+				sah->surfix[sah->i + 1]);
+	sah->i = 0;
+	while (++sah->i < sah->n)
+	{
+		sah->cost = surface_area(sah->prefix[sah->i - 1]) * sah->i
+			+ surface_area(sah->surfix[sah->i]) * (sah->n - sah->i);
+		if (sah->cost < sah->best_cost)
+		{
+			sah->best_cost = sah->cost;
+			sah->sah.best_axis = sah->axis;
+			sah->sah.best_split = start + sah->i;
+		}
+	}
+}
+
 t_sah	cal_sah(t_obj **objects, int start, int end)
 {
 	t_cal_sah	sah;
-	int			i;
 
+	sah.n = end - start;
+	sah.prefix = malloc(sizeof(t_aabb) * sah.n);
+	sah.surfix = malloc(sizeof(t_aabb) * sah.n);
+	if (!sah.prefix || !sah.surfix)
+		return (free(sah.prefix), free(sah.surfix), sah.sah);
 	sah.best_cost = 1e30f;
 	sah.axis = -1;
 	while (++sah.axis < 3)
-	{
-		sort_obj(objects, start, end, sah.axis);
-		i = start;
-		while (++i < end)
-		{
-			sah.left_box = combine_aabbs(objects, start, i);
-			sah.right_box = combine_aabbs(objects, i, end);
-			substitute(&sah.n_left, i - start, &sah.n_right, end - i);
-			sah.cost = surface_area(sah.left_box) * sah.n_left
-				+ surface_area(sah.right_box) * sah.n_right;
-			if (sah.cost < sah.best_cost)
-			{
-				sah.best_cost = sah.cost;
-				sah.sah.best_axis = sah.axis;
-				sah.sah.best_split = i;
-			}
-		}
-	}
+		cal_cost(objects, start, end, &sah);
+	free(sah.prefix);
+	free(sah.surfix);
 	return (sah.sah);
 }
 
@@ -104,67 +108,3 @@ t_bvh_node	*build_bvh(t_obj **objects, int start, int end)
 	node->box = surrounding_box(node->left->box, node->right->box);
 	return (node);
 }
-
-// t_aabb	surrounding_centroid_box(t_obj **objects, int start, int end)
-// {
-// 	t_aabb	box;
-// 	int		i;
-
-// 	box = objects[start]->box;
-// 	i=start;
-// 	while(++i<end)
-// 		box = surrounding_box(box, objects[i]->box);
-// 	return (box);
-// }
-
-// int	choose_longest_axis(t_aabb box)
-// {
-// 	t_vec	size;
-
-// 	size = vec_sub(box.max, box.min);
-// 	if (size.x > size.y && size.x > size.z)
-// 		return (0);
-// 	else if (size.y > size.z)
-// 		return (1);
-// 	else
-// 		return (2);
-// }
-
-// t_bvh_node	*build_bvh(t_obj **objects, int start, int end)
-// {
-// 	t_bvh_node	*node;
-// 	int			count;
-// 	int			axis;
-// 	int			mid;
-// 	int i;
-
-// 	count = end - start;
-// 	if (count <= 0)
-// 		return (NULL);
-// 	node = malloc(sizeof(t_bvh_node));
-// 	if (!node)
-// 		return (NULL);
-// 	if (count <= 2)
-// 	{
-// 		i=start-1;
-// 		while(++i<end-1)
-// 			objects[i]->next = objects[i + 1];
-// 		objects[end - 1]->next = NULL;
-// 		node->obj = objects[start];
-// 		node->left = NULL;
-// 		node->right = NULL;
-// 		node->box = get_aabb(objects[start]);
-// 		i=start;
-// 		while(++i<end)
-// 			node->box = surrounding_box(node->box, get_aabb(objects[i]));
-// 		return (node);
-// 	}
-// 	axis = choose_longest_axis(surrounding_centroid_box(objects, start, end));
-// 	sort_obj(objects, start, end, axis);
-// 	mid = (start + end) / 2;
-// 	node->left = build_bvh(objects, start, mid);
-// 	node->right = build_bvh(objects, mid, end);
-// 	node->obj = NULL;
-// 	node->box = surrounding_box(node->left->box, node->right->box);
-// 	return (node);
-// }

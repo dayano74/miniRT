@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = cc
-# CFLAGS = -O2 -I./includes 
+# CFLAGS = -O2 -I./includes
 CFLAGS = -Wall -Wextra -Werror -I./includes -g
 LDFLAGS = -lm
 
@@ -111,12 +111,12 @@ run:all
 	./$(MANDATORY)
 
 clean:
-	rm -f $(OBJS) 
+	rm -f $(OBJS)
 	make -C $(LIBFTDIR) clean
 	make -C $(MLXDIR) clean
 
 fclean: clean
-	rm -f $(MANDATORY) 
+	rm -f $(MANDATORY)
 	make -C $(LIBFTDIR) fclean
 	make -C $(MLXDIR) clean
 

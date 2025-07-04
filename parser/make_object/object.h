@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 21:12:49 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:01:51 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_cylinder_side_calc
 	t_vec				oc;
 	t_vec				dxn;
 	t_vec				ocxn;
-	// Removed the unused half_height field to avoid confusion.
 	double				a;
 	double				b;
 	double				c;
