@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_cylinder.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:54:46 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 22:00:37 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/28 22:19:47 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@ void	make_cylinder(char **tokenlist, t_world *world)
 {
 	t_obj		*obj;
 	t_cylinder	cylinder;
+	t_color		color;
 
+	if (array_count(tokenlist) != 6)
+	{
+		free_world(world);
+		ft_free_array(tokenlist);
+		syntax_error();
+	}
 	obj = (t_obj *)malloc(sizeof(t_obj));
 	if (obj == NULL)
 	{
@@ -28,7 +35,13 @@ void	make_cylinder(char **tokenlist, t_world *world)
 	cylinder.axis = token_to_vec(tokenlist[2]);
 	cylinder.dia = ft_atof(tokenlist[3]);
 	cylinder.height = ft_atof(tokenlist[4]);
-	cylinder.color = color_normalize(token_to_color(tokenlist[5]));
+	if (!token_to_color(tokenlist[5], &color))
+	{
+		free_world(world);
+		ft_free_array(tokenlist);
+		exit(1);
+	}
+	cylinder.color = color_normalize(color);
 	obj->type = CYLINDER;
 	obj->u_object.cylinder = cylinder;
 	obj->next = NULL;

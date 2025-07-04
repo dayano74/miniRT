@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 21:03:04 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 21:35:49 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/28 21:59:21 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,18 @@ static int	ft_atoi_with_error(char *n, int *error_flag)
 	return ((int)num * sign);
 }
 
-int	atoi_with_error(char *n, int max, int min)
+bool	atoi_with_error(char *n, int max, int min, int *num)
 {
-	int	num;
 	int	flag;
 
 	flag = 0;
-	num = ft_atoi_with_error(n, &flag);
-	if (flag || num > max || num < min)
+	*num = ft_atoi_with_error(n, &flag);
+	if (flag || *num > max || *num < min)
 	{
 		ft_putstr_fd("Error: ", 2);
 		ft_putstr_fd(n, 2);
 		ft_putstr_fd(" is invalid\n", 2);
-		exit(1);
+		return (false);
 	}
-	return (num);
+	return (true);
 }
