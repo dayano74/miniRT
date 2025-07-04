@@ -42,6 +42,7 @@ SRCS = main.c\
 		insec_point/insec_ray_sphere.c\
 		insec_point/insec_ray_triangle.c\
 		insec_point/trace_nearest.c\
+		insec_point/get_cylinder_normal.c\
 		color/color_add.c\
 		color/color_const_mult.c\
 		color/color_init.c\
@@ -80,6 +81,7 @@ SRCS = main.c\
 		error/error_malloc.c\
 		error/error_syntax.c\
 		error/error_invalid.c\
+		error/error_mult_set.c\
 		free/free_light.c\
 		free/free_objects.c\
 		free/free_world.c\
