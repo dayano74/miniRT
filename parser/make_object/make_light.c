@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:10:01 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 11:49:58 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 21:22:32 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ void	make_light(char **tokenlist, t_world *world)
 	if (!token_to_color(tokenlist[3], &color))
 		error_invalid(tokenlist, world);
 	light->color = color_normalize(color_const_mult(color, brightness));
+	if (world->set_obj & 8)
+		return (free_world(world), error_mult_set("light"));
 	world->set_obj |= 8;
 }

@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:30:32 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 09:38:06 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 21:11:37 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static void	move_view(t_camera *camera)
 
 void	look_right_left(t_world *world, int sign)
 {
-	world->cameras->view = rotate_xz(world->cameras->view, 3.14 / 360 * sign);
-	move_view(world->cameras);
+	world->camera->view = rotate_xz(world->camera->view, 3.14 / 360 * sign);
+	move_view(world->camera);
 	world->mosaic_size = 21;
 	raytracing(world);
 	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);
@@ -67,10 +67,10 @@ void	look_up_down(t_world *world, int sign)
 {
 	t_vec	axis;
 
-	axis = vec_normalize(world->cameras->sx);
-	world->cameras->view = rotate_axis(world->cameras->view, axis, 3.14 / 360
+	axis = vec_normalize(world->camera->sx);
+	world->camera->view = rotate_axis(world->camera->view, axis, 3.14 / 360
 			* sign);
-	move_view(world->cameras);
+	move_view(world->camera);
 	world->mosaic_size = 21;
 	raytracing(world);
 	mlx_put_image_to_window(world->mlx, world->win, world->img, 0, 0);

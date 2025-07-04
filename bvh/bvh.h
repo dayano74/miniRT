@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:17:55 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 10:34:07 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:09:02 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,12 @@ typedef struct s_cal_sah
 {
 	t_sah	sah;
 	float	best_cost;
-	t_aabb	left_box;
-	t_aabb	right_box;
-	int		n_left;
-	int		n_right;
 	float	cost;
 	int		axis;
 	int		i;
+	int		n;
+	t_aabb	*prefix;
+	t_aabb	*surfix;
 }			t_cal_sah;
 
 t_aabb		get_aabb(t_obj *obj);

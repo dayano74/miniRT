@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:12:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:35:38 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/04 22:50:01 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	window_init(t_world *world)
 	world->screen_width = 1000;
 	world->screen_height = 1000;
 	world->mosaic_size = 1;
-	world->cameras = NULL;
+	world->camera = NULL;
 	world->objects = NULL;
 	world->lights = NULL;
 	world->set_obj = 0;
@@ -68,6 +68,7 @@ int	main(int argc, char *argv[])
 	world.obj_array = list_to_array(world.objects);
 	world.bvh = build_bvh(world.obj_array.obj_array, 0, world.obj_array.count);
 	raytracing(&world);
+	printf("終わったで\n");
 	mlx_put_image_to_window(world.mlx, world.win, world.img, 0, 0);
 	setup_hooks(&world);
 	mlx_loop(world.mlx);

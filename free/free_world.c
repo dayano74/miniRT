@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:30:27 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:37:09 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/04 22:49:42 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_world(t_world *world)
 {
-	free(world->cameras);
+	free(world->camera);
 	free_lights(world->lights);
 	free_objects(world->objects);
 	mlx_destroy_image(world->mlx, world->img);

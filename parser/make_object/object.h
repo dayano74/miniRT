@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 21:52:46 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/04 22:01:51 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ typedef struct s_world
 	int					endain;
 	int					screen_width;
 	int					screen_height;
-	t_camera			*cameras;
+	t_camera			*camera;
 	t_obj				*last_objects;
 	t_obj				*objects;
 	t_obj_array			obj_array;
@@ -189,16 +189,6 @@ typedef struct s_world
 	t_input				input;
 	int					set_obj;
 }						t_world;
-
-// t_obj				*make_cylinder(t_vec pos, double dia, double height,
-// 						t_color color);
-// t_obj				*make_plane(t_vec pos, t_vec normal, t_color color);
-// t_obj				*make_sphere(t_vec pos, double dia, t_color color);
-// t_obj				*make_triangle(t_vec p1, t_vec p2, t_vec p3,
-// t_color color);
-// t_camera			*make_camera(t_vec pos, t_vec dir, double fob, int width);
-// t_light				*make_light(t_vec pos, double brightness,
-// t_color color);
 
 void					make_ambient(char **tokenlist, t_world *world);
 void					make_cylinder(char **tokenlist, t_world *world);
