@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:03:59 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 11:49:47 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 21:21:59 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	make_camera(char **tokenlist, t_world *world)
 	camera = (t_camera *)malloc(sizeof(t_camera));
 	if (camera == NULL)
 		error_malloc(tokenlist, world);
-	world->cameras = camera;
+	world->camera = camera;
 	camera->pos = token_to_vec(tokenlist[1]);
 	camera->dir = vec_normalize(token_to_vec(tokenlist[2]));
 	if (!atoi_with_error(tokenlist[3], FOV_MAX, FOV_MIN, &fov))
@@ -40,5 +40,7 @@ void	make_camera(char **tokenlist, t_world *world)
 		up = vec_init(0, 0, 1);
 	camera->sx = vec_normalize(vec_cross(up, camera->view));
 	camera->sy = vec_normalize(vec_cross(camera->view, camera->sx));
+	if (world->set_obj & 2)
+		return (free_world(world), error_mult_set("camera"));
 	world->set_obj |= 2;
 }

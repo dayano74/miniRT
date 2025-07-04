@@ -81,6 +81,7 @@ SRCS = main.c\
 		error/error_malloc.c\
 		error/error_syntax.c\
 		error/error_invalid.c\
+		error/error_mult_set.c\
 		free/free_light.c\
 		free/free_objects.c\
 		free/free_world.c\
