@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   insec_ray_cylinder.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 15:57:34 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:00:47 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/04 22:00:47 by okaname          ###   ########.fr       *
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ double	intersect_ray_cyl_side(t_ray ray, t_cylinder cylinder, double t_side)
 				t_side = calc.t2;
 			if (t_side != INF)
 			{
-				calc.P = vec_add(ray.start, vec_mult(ray.dir, t_side));
-				calc.h = vec_dot(vec_sub(calc.P, cylinder.pos), calc.n);
+				calc.p = vec_add(ray.start, vec_mult(ray.dir, t_side));
+				calc.h = vec_dot(vec_sub(calc.p, cylinder.pos), calc.n);
 				if (fabs(calc.h) > cylinder.height * 0.5)
 					t_side = INF;
 			}

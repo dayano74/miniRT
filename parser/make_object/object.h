@@ -66,7 +66,7 @@ typedef struct s_cylinder_side_calc
 	double				sqrt_disc;
 	double				t1;
 	double				t2;
-	t_vec				P;
+	t_vec				p;
 	double				h;
 }						t_cylinder_side_calc;
 
