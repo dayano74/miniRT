@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = cc
-# CFLAGS = -O2 -I./includes 
+# CFLAGS = -O2 -I./includes
 CFLAGS = -Wall -Wextra -Werror -I./includes -g
 LDFLAGS = -lm
 
@@ -41,6 +41,7 @@ SRCS = main.c\
 		insec_point/insec_ray_sphere.c\
 		insec_point/insec_ray_triangle.c\
 		insec_point/trace_nearest.c\
+		insec_point/get_cylinder_normal.c\
 		color/color_add.c\
 		color/color_const_mult.c\
 		color/color_init.c\
@@ -105,12 +106,12 @@ run:all
 	./$(MANDATORY)
 
 clean:
-	rm -f $(OBJS) 
+	rm -f $(OBJS)
 	make -C $(LIBFTDIR) clean
 	make -C $(MLXDIR) clean
 
 fclean: clean
-	rm -f $(MANDATORY) 
+	rm -f $(MANDATORY)
 	make -C $(LIBFTDIR) fclean
 	make -C $(MLXDIR) clean
 
