@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   build_bvh.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 15:02:54 by okaname           #+#    #+#             */
-/*   Updated: 2025/05/29 11:02:58 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/30 10:28:38 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh.h"
+#include "../minirt.h"
 
 t_aabb	combine_aabbs(t_obj **objects, int start, int end)
 {
 	t_aabb	box;
-	int i;
+	int		i;
 
 	box = get_aabb(objects[start]);
-	i=start;
-	while(++i<end)
+	i = start;
+	while (++i < end)
 		box = surrounding_box(box, get_aabb(objects[i]));
 	return (box);
 }
@@ -34,40 +34,49 @@ float	surface_area(t_aabb box)
 
 t_sah	cal_sah(t_obj **objects, int start, int end)
 {
-	t_sah	sah;
-	float	best_cost;
-	t_aabb	left_box;
-	t_aabb	right_box;
-	int		n_left;
-	int		n_right;
-	float	cost;
-	int axis;
-	int i;
+	t_cal_sah	sah;
+	int			i;
 
-
-	best_cost = 1e30f;
-	axis=-1;
-	while(++axis<3)
+	sah.best_cost = 1e30f;
+	sah.axis = -1;
+	while (++sah.axis < 3)
 	{
-		sort_obj(objects, start, end, axis);
-		i=start;
-		while(++i<end)
+		sort_obj(objects, start, end, sah.axis);
+		i = start;
+		while (++i < end)
 		{
-			left_box = combine_aabbs(objects, start, i);
-			right_box = combine_aabbs(objects, i, end);
-			n_left = i - start;
-			n_right = end - i;
-			cost = surface_area(left_box) * n_left + surface_area(right_box)
-				* n_right;
-			if (cost < best_cost)
+			sah.left_box = combine_aabbs(objects, start, i);
+			sah.right_box = combine_aabbs(objects, i, end);
+			substitute(&sah.n_left, i - start, &sah.n_right, end - i);
+			sah.cost = surface_area(sah.left_box) * sah.n_left
+				+ surface_area(sah.right_box) * sah.n_right;
+			if (sah.cost < sah.best_cost)
 			{
-				best_cost = cost;
-				sah.best_axis = axis;
-				sah.best_split = i;
+				sah.best_cost = sah.cost;
+				sah.sah.best_axis = sah.axis;
+				sah.sah.best_split = i;
 			}
 		}
 	}
-	return (sah);
+	return (sah.sah);
+}
+
+static void	make_bvh_node(t_bvh_node **node, t_obj **objects, int start,
+		int end)
+{
+	int	i;
+
+	i = start - 1;
+	while (++i < end - 1)
+		objects[i]->next = objects[i + 1];
+	objects[end - 1]->next = NULL;
+	(*node)->obj = objects[start];
+	(*node)->left = NULL;
+	(*node)->right = NULL;
+	(*node)->box = get_aabb(objects[start]);
+	i = start;
+	while (++i < end)
+		(*node)->box = surrounding_box((*node)->box, get_aabb(objects[i]));
 }
 
 t_bvh_node	*build_bvh(t_obj **objects, int start, int end)
@@ -75,7 +84,6 @@ t_bvh_node	*build_bvh(t_obj **objects, int start, int end)
 	t_bvh_node	*node;
 	int			count;
 	t_sah		sah;
-	int i;
 
 	count = end - start;
 	if (count <= 0)
@@ -85,17 +93,7 @@ t_bvh_node	*build_bvh(t_obj **objects, int start, int end)
 		return (NULL);
 	if (count <= 2)
 	{
-		i=start-1;
-		while(++i<end-1)
-			objects[i]->next = objects[i + 1];
-		objects[end - 1]->next = NULL;
-		node->obj = objects[start];
-		node->left = NULL;
-		node->right = NULL;
-		node->box = get_aabb(objects[start]);
-		i=start;
-		while(++i<end)
-			node->box = surrounding_box(node->box, get_aabb(objects[i]));
+		make_bvh_node(&node, objects, start, end);
 		return (node);
 	}
 	sah = cal_sah(objects, start, end);

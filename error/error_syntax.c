@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 23:12:00 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 11:44:31 by okaname          ###   ########.fr       */
+/*   Created: 2025/06/24 20:20:55 by okaname           #+#    #+#             */
+/*   Updated: 2025/06/30 11:36:09 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minirt.h"
 
-void	ft_free_array(char **array)
+void	syntax_error(char **tokenlist, t_world *world)
 {
-	int	i;
-
-	i = 0;
-	if (array == NULL)
-		return ;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
+	free_world(world);
+	ft_free_array(tokenlist);
+	ft_putstr_fd("syntax error\n", 2);
+	exit(2);
 }

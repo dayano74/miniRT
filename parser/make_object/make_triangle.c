@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 20:32:58 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/28 22:24:42 by okaname          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:55:00 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,15 @@ void	make_triangle(char **tokenlist, t_world *world)
 	t_color		color;
 
 	if (array_count(tokenlist) != 5)
-	{
-		free_world(world);
-		ft_free_array(tokenlist);
-		syntax_error();
-	}
+		syntax_error(tokenlist, world);
 	obj = (t_obj *)malloc(sizeof(t_obj));
 	if (obj == NULL)
-	{
-		ft_free_array(tokenlist);
-		free_world(world);
-		error_malloc();
-	}
-	triangle.p1 = token_to_vec(tokenlist[1]);
-	triangle.p2 = token_to_vec(tokenlist[2]);
-	triangle.p3 = token_to_vec(tokenlist[3]);
+		error_malloc(tokenlist, world);
 	if (!token_to_color(tokenlist[4], &color))
-	{
-		ft_free_array(tokenlist);
-		free_world(world);
-		exit(1);
-	}
-	triangle.color = color_normalize(color);
+		error_invalid(tokenlist, world);
+	triangle = (t_triangle){token_to_vec(tokenlist[1]),
+		token_to_vec(tokenlist[2]), token_to_vec(tokenlist[3]), vec_init(0, 0,
+			0), color};
 	triangle.normal = vec_normalize(vec_cross(vec_sub(triangle.p1, triangle.p2),
 				vec_sub(triangle.p1, triangle.p3)));
 	obj->type = TRIANGLE;

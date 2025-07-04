@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:19:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/24 22:11:04 by dayano           ###   ########.fr       */
+/*   Updated: 2025/06/30 12:36:52 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../insec_point/insec.h"
 #include "../minirt.h"
 
 int	raytrace_pixel(t_ray ray, t_world *world, int i, int j)
@@ -33,32 +32,28 @@ int	raytrace_pixel(t_ray ray, t_world *world, int i, int j)
 
 void	raytracing(t_world *world)
 {
-	int		i;
-	int		j;
-	int		color;
-	t_ray	ray;
-	int		x;
-	int		y;
+	t_raytracing	var;
 
-	i = 0;
-	ray.start = world->cameras->pos;
-	while (i < world->screen_width)
+	var.i = 0;
+	var.ray.start = world->cameras->pos;
+	while (var.i < world->screen_width)
 	{
-		j = 0;
-		while (j < world->screen_height)
+		var.j = 0;
+		while (var.j < world->screen_height)
 		{
-			color = raytrace_pixel(ray, world, i, j);
-			x = i - 1;
-			while (++x < i + world->mosaic_size && x < world->screen_width)
+			var.color = raytrace_pixel(var.ray, world, var.i,
+					world->screen_height - var.j);
+			var.x = var.i - 1;
+			while (++var.x < var.i + world->mosaic_size
+				&& var.x < world->screen_width)
 			{
-				y = j - 1;
-				while (++y < j + world->mosaic_size && y < world->screen_height)
-				{
-					my_mlx_pixel_put(world, x, y, color);
-				}
+				var.y = var.j - 1;
+				while (++var.y < var.j + world->mosaic_size
+					&& var.y < world->screen_height)
+					my_mlx_pixel_put(world, var.x, var.y, var.color);
 			}
-			j += world->mosaic_size;
+			var.j += world->mosaic_size;
 		}
-		i += world->mosaic_size;
+		var.i += world->mosaic_size;
 	}
 }
