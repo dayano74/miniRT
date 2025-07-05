@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:27:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 11:50:06 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/05 18:02:15 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	make_sphere(char **tokenlist, t_world *world)
 	sphere.pos = token_to_vec(tokenlist[1]);
 	sphere.rad = ft_atof(tokenlist[2]) / 2.0;
 	if (!token_to_color(tokenlist[3], &color))
-		error_invalid(tokenlist, world);
+		return (free(obj), error_invalid(tokenlist, world));
 	sphere.color = color_normalize(color);
 	obj->type = SPHERE;
 	obj->u_object.sphere = sphere;

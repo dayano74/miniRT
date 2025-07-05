@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 20:32:58 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 14:04:58 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/05 18:03:39 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	make_triangle(char **tokenlist, t_world *world)
 	if (obj == NULL)
 		error_malloc(tokenlist, world);
 	if (!token_to_color(tokenlist[4], &color))
-		error_invalid(tokenlist, world);
+		return (free(obj), error_invalid(tokenlist, world));
 	triangle = (t_triangle){token_to_vec(tokenlist[1]),
 		token_to_vec(tokenlist[2]), token_to_vec(tokenlist[3]), vec_init(0, 0,
 			0), color_normalize(color)};

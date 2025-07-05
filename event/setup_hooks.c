@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:26:16 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:41:08 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/05 18:24:37 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #define LEFTA0RROR 65363
 #define DOWNARROR 65364
 
-static int _free_world_and_exit(t_world *world)
+static int	_free_world_and_exit(t_world *world)
 {
 	free_world(world);
 	exit(0);
