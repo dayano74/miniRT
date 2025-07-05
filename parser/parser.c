@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:12:35 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/05 18:05:30 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	make_obj(char **lines, t_world *world)
 		ft_putstr_fd("Error: ", 2);
 		ft_putstr_fd(lines[0], 2);
 		ft_putstr_fd("\n", 2);
+		ft_free_array(lines);
 		free_world(world);
 		exit(1);
 	}
