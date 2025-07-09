@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:12:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 17:54:27 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/09 21:04:51 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int argc, char *argv[])
 	free(world.obj_array.obj_array);
 	world.objects = NULL;
 	raytracing(&world);
-	printf("終わったで\n");
+	printf("finished\n");
 	mlx_put_image_to_window(world.mlx, world.win, world.img, 0, 0);
 	setup_hooks(&world);
 	mlx_loop(world.mlx);
