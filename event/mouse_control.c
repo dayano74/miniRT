@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 19:26:41 by dayano            #+#    #+#             */
-/*   Updated: 2025/07/18 20:00:33 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/18 20:02:36 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	mouse_release(int button, int x, int y, t_world *world)
 
 int	mouse_move(int x, int y, t_world *world)
 {
-	int delta_x;
-	int delta_y;
+	int	delta_x;
+	int	delta_y;
 
 	if (!world->input.mouse_pressed || !world->input.mouse_initialized)
 		return (0);
