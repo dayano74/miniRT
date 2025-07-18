@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 19:26:41 by dayano            #+#    #+#             */
-/*   Updated: 2025/07/18 19:54:29 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/18 20:00:33 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ int	mouse_release(int button, int x, int y, t_world *world)
 	(void)x;
 	(void)y;
 	if (button == 1)
-	{
 		world->input.mouse_pressed = false;
-		// world->input.mouse_initialized = false; // necessary to reset this?
-	}
 	return (0);
 }
 
@@ -45,14 +42,6 @@ int	mouse_move(int x, int y, t_world *world)
 		return (0);
 	delta_x = x - world->input.last_mouse_x;
 	delta_y = y - world->input.last_mouse_y;
-
-	// for debug
-	if (delta_x != 0 || delta_y != 0)
-	{
-		printf("Mouse moved: delta_x = %d, delta_y = %d\n", delta_x, delta_y);
-		printf("Mouse moved: pressed = %d\n", world->input.mouse_pressed);
-	}
-
 	if (delta_x != 0)
 	{
 		look_right_left(world, -delta_x * 0.05);
