@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 09:33:56 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/30 09:40:11 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:38:28 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,9 @@ void	look_up_down(t_world *world, int sign);
 void	moza_down(t_world *world);
 void	moza_up(t_world *world);
 void	gradual_mosaic_reveal(t_world *world);
+
+int		mouse_press(int button, int x, int y, t_world *world);
+int		mouse_release(int button, int x, int y, t_world *world);
+int		mouse_move(int x, int y, t_world *world);
 
 #endif
