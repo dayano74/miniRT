@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 18:05:30 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/29 21:00:17 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
-
-void	make_obj(char **lines, t_world *world)
-{
-	if (!ft_strcmp(lines[0], "A"))
-		make_ambient(lines, world);
-	else if (!ft_strcmp(lines[0], "C"))
-		make_camera(lines, world);
-	else if (!ft_strcmp(lines[0], "L"))
-		make_light(lines, world);
-	else if (!ft_strcmp(lines[0], "pl"))
-		make_plane(lines, world);
-	else if (!ft_strcmp(lines[0], "cy"))
-		make_cylinder(lines, world);
-	else if (!ft_strcmp(lines[0], "sp"))
-		make_sphere(lines, world);
-	else if (!ft_strcmp(lines[0], "tr"))
-		make_triangle(lines, world);
-	else if (ft_strcmp(lines[0], "\n"))
-	{
-		ft_putstr_fd("Error: ", 2);
-		ft_putstr_fd(lines[0], 2);
-		ft_putstr_fd("\n", 2);
-		ft_free_array(lines);
-		free_world(world);
-		exit(1);
-	}
-}
 
 void	print_no_set(char *obj, int *flag)
 {
@@ -69,18 +42,53 @@ void	check_unset_obj(t_world *world)
 	}
 }
 
-int	parser(t_world *world, char *file)
+int	get_fd(char *file, t_world *world)
 {
-	int		fd;
-	char	*line;
-	char	**lines;
+	int	fd;
 
+	if (!file || !*file)
+	{
+		free_world(world);
+		error_open(file);
+	}
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
 		free_world(world);
 		error_open(file);
 	}
+	return (fd);
+}
+
+void	check_extension(char *file, char *ext, t_world *world)
+{
+	int	file_len;
+	int	ext_len;
+
+	if (!file || !ext)
+	{
+		free_world(world);
+		ft_putstr_fd("Error: Invalid file or extension\n", 2);
+		exit(1);
+	}
+	file_len = ft_strlen(file);
+	ext_len = ft_strlen(ext);
+	if (file_len < ext_len || ft_strcmp(file + file_len - ext_len, ext) != 0)
+	{
+		free_world(world);
+		ft_putstr_fd("Error: Invalid file extension\n", 2);
+		exit(1);
+	}
+}
+
+int	parser(t_world *world, char *file)
+{
+	int		fd;
+	char	*line;
+	char	**lines;
+
+	check_extension(file, ".rt", world);
+	fd = get_fd(file, world);
 	while (1)
 	{
 		line = get_next_line(fd);

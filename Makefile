@@ -64,6 +64,7 @@ SRCS = main.c\
 		vector/print_vec.c\
 		parser/make_object/token_to_color.c\
 		parser/make_object/token_to_vec.c\
+		parser/make_object/make_object.c\
 		parser/make_object/make_cylinder.c\
 		parser/make_object/make_ambient.c\
 		parser/make_object/make_camera.c\
