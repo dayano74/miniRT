@@ -6,7 +6,7 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:12:49 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/09 21:04:51 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/18 19:37:50 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	input_init(t_world *world)
 	world->input.look_down = false;
 	world->input.moza_down = false;
 	world->input.moza_up = false;
+	world->input.mouse_pressed = false;
+	world->input.last_mouse_x = 0;
+	world->input.last_mouse_y = 0;
+	world->input.mouse_initialized = false;
 }
 
 void	window_init(t_world *world)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_hooks.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 20:26:16 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 18:24:37 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:24:48 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,8 @@ void	setup_hooks(t_world *world)
 	mlx_hook(world->win, 2, 1L << 0, key_press, world);
 	mlx_hook(world->win, 3, 1L << 1, key_release, world);
 	mlx_hook(world->win, 17, 0, _free_world_and_exit, world);
+	mlx_hook(world->win, 6, 1L << 6, mouse_move, world);
+	mlx_hook(world->win, 4, 1L << 2, mouse_press, world);
+	mlx_hook(world->win, 5, 1L << 3, mouse_release, world);
 	mlx_loop_hook(world->mlx, update_loop, world);
 }

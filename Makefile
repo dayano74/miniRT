@@ -30,6 +30,7 @@ SRCS = main.c\
 		event/move_camera_dir.c\
 		event/pixel_put.c\
 		event/mozaic.c\
+		event/mouse_control.c\
 		light/ambient_light.c\
 		light/diffuse_reflection.c\
 		light/specular_reflection.c\

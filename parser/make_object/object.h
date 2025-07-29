@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:33 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/04 22:01:51 by okaname          ###   ########.fr       */
+/*   Updated: 2025/07/18 19:26:15 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,10 @@ typedef struct s_input
 	bool				look_down;
 	bool				moza_up;
 	bool				moza_down;
+	bool				mouse_pressed;
+	int					last_mouse_x;
+	int					last_mouse_y;
+	bool				mouse_initialized;
 }						t_input;
 
 typedef struct s_world
