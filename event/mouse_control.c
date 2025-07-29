@@ -35,7 +35,7 @@ static void	zoom_camera(t_world *world, double zoom_factor)
 	dir.x = world->camera->dir.x;
 	dir.y = world->camera->dir.y;
 	dir.z = world->camera->dir.z;
-	vec_normalize(dir);
+	dir = vec_normalize(dir);
 	if (zoom_factor > 1.0)
 		move_distance = 0.5;
 	else
