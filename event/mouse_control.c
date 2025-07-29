@@ -6,26 +6,11 @@
 /*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 19:26:41 by dayano            #+#    #+#             */
-/*   Updated: 2025/07/18 20:29:49 by dayano           ###   ########.fr       */
+/*   Updated: 2025/07/29 14:34:29 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
-
-// static void	zoom_camera(t_world *world, double zoom_factor)
-// {
-// 	double	prev_fov;
-
-// 	prev_fov = world->camera->fov;
-// 	world->camera->fov = world->camera->fov / zoom_factor;
-
-// 	if (world->camera->fov < 10.0)
-// 		world->camera->fov = 10.0;
-// 	else if (world->camera->fov > 120.0)
-// 		world->camera->fov = 120.0;
-// 	if (world->camera->fov == prev_fov)
-// 		return;
-// }
 
 static void	zoom_camera(t_world *world, double zoom_factor)
 {
