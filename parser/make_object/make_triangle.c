@@ -6,11 +6,21 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 20:32:58 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 18:03:39 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/03 15:17:15 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minirt.h"
+
+static void	make_triangle2(t_world *world, t_obj *obj)
+{
+	if (world->objects == NULL)
+		world->objects = obj;
+	else
+		world->last_objects->next = obj;
+	world->last_objects = obj;
+	world->set_obj |= 4;
+}
 
 void	make_triangle(char **tokenlist, t_world *world)
 {
@@ -25,18 +35,15 @@ void	make_triangle(char **tokenlist, t_world *world)
 		error_malloc(tokenlist, world);
 	if (!token_to_color(tokenlist[4], &color))
 		return (free(obj), error_invalid(tokenlist, world));
-	triangle = (t_triangle){token_to_vec(tokenlist[1]),
-		token_to_vec(tokenlist[2]), token_to_vec(tokenlist[3]), vec_init(0, 0,
-			0), color_normalize(color)};
+	if (!token_to_vec(tokenlist[1], &triangle.p1) || !token_to_vec(tokenlist[2],
+			&triangle.p2) || !token_to_vec(tokenlist[3], &triangle.p3))
+		return (free(obj), error_invalid(tokenlist, world));
+	triangle = (t_triangle){triangle.p1, triangle.p2, triangle.p3, vec_init(0,
+			0, 0), color_normalize(color)};
 	triangle.normal = vec_normalize(vec_cross(vec_sub(triangle.p1, triangle.p2),
 				vec_sub(triangle.p1, triangle.p3)));
 	obj->type = TRIANGLE;
 	obj->u_object.triangle = triangle;
 	obj->next = NULL;
-	if (world->objects == NULL)
-		world->objects = obj;
-	else
-		world->last_objects->next = obj;
-	world->last_objects = obj;
-	world->set_obj |= 4;
+	make_triangle2(world, obj);
 }

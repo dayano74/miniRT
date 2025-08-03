@@ -6,11 +6,21 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:27:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/29 16:59:04 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/03 15:19:41 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minirt.h"
+
+static void	make_sphere2(t_world *world, t_obj *obj)
+{
+	if (world->objects == NULL)
+		world->objects = obj;
+	else
+		world->last_objects->next = obj;
+	world->last_objects = obj;
+	world->set_obj |= 4;
+}
 
 void	make_sphere(char **tokenlist, t_world *world)
 {
@@ -23,7 +33,8 @@ void	make_sphere(char **tokenlist, t_world *world)
 	obj = (t_obj *)malloc(sizeof(t_obj));
 	if (obj == NULL)
 		error_malloc(tokenlist, world);
-	sphere.pos = token_to_vec(tokenlist[1]);
+	if (!token_to_vec(tokenlist[1], &sphere.pos))
+		return (free(obj), error_invalid(tokenlist, world));
 	if (!atof_with_error(tokenlist[2], INT_MAX, 0, &sphere.rad))
 		error_invalid(tokenlist, world);
 	sphere.rad /= 2.0;
@@ -33,10 +44,5 @@ void	make_sphere(char **tokenlist, t_world *world)
 	obj->type = SPHERE;
 	obj->u_object.sphere = sphere;
 	obj->next = NULL;
-	if (world->objects == NULL)
-		world->objects = obj;
-	else
-		world->last_objects->next = obj;
-	world->last_objects = obj;
-	world->set_obj |= 4;
+	make_sphere2(world, obj);
 }

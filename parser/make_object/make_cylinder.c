@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:54:46 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/29 14:45:14 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/03 15:01:25 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void	make_cylinder(char **tokenlist, t_world *world)
 	obj = (t_obj *)malloc(sizeof(t_obj));
 	if (obj == NULL)
 		error_malloc(tokenlist, world);
-	cylinder.pos = token_to_vec(tokenlist[1]);
-	cylinder.axis = token_to_vec(tokenlist[2]);
+	if (!token_to_vec(tokenlist[1], &cylinder.pos)
+		|| !token_to_vec(tokenlist[2], &cylinder.axis))
+		return (free(obj), error_invalid(tokenlist, world));
 	if (!atof_with_error(tokenlist[3], INT_MAX, 0, &cylinder.dia))
 		error_invalid(tokenlist, world);
 	if (!atof_with_error(tokenlist[4], INT_MAX, 0, &cylinder.height))

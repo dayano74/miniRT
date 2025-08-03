@@ -6,21 +6,23 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:29:45 by okaname           #+#    #+#             */
-/*   Updated: 2025/06/17 20:40:34 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/03 15:06:58 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "object.h"
+#include "../../minirt.h"
 
-t_vec	token_to_vec(char *token)
+bool	token_to_vec(char *token, t_vec *vec)
 {
 	char	**xyz;
-	t_vec	vec;
 
 	xyz = ft_split(token, ',');
 	if (xyz == NULL)
-		return (vec_init(0, 0, 0));
-	vec = vec_init(ft_atof(xyz[0]), ft_atof(xyz[1]), ft_atof(xyz[2]));
+		return (false);
+	if (array_count(xyz) != 3)
+		return (ft_putstr_fd("Error", 2), ft_putstr_fd(token, 2),
+			ft_putstr_fd("\n", 2), ft_free_array(xyz), false);
+	*vec = vec_init(ft_atof(xyz[0]), ft_atof(xyz[1]), ft_atof(xyz[2]));
 	ft_free_array(xyz);
-	return (vec);
+	return (true);
 }
