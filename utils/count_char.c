@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   count_char.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 20:25:09 by okaname           #+#    #+#             */
-/*   Updated: 2025/08/22 17:00:01 by okaname          ###   ########.fr       */
+/*   Created: 2025/08/22 16:57:17 by okaname           #+#    #+#             */
+/*   Updated: 2025/08/22 16:59:27 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "../minirt.h"
 
-int		array_count(char **array);
-bool	atof_with_error(char *str, double max, double min, double *num);
-bool	atoi_with_error(char *n, int max, int min, int *num);
-void	substitute(int *v1, int num1, int *v2, int num2);
-int		count_char(char *str, char c);
+int	count_char(char *str, char c)
+{
+	int	i;
+	int	count;
 
-#endif
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}
