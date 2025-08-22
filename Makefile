@@ -91,6 +91,7 @@ SRCS = main.c\
 		utils/atof_with_error.c\
 		utils/atoi_with_error.c\
 		utils/substitute.c\
+		utils/count_char.c\
 
 
 OBJS = $(SRCS:.c=.o)
