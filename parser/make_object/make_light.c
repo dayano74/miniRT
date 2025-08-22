@@ -6,7 +6,7 @@
 /*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 19:10:01 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 18:16:50 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/03 15:09:14 by okaname          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	make_light(char **tokenlist, t_world *world)
 		error_malloc(tokenlist, world);
 	world->lights = light;
 	light->next = NULL;
-	light->pos = token_to_vec(tokenlist[1]);
+	if (!token_to_vec(tokenlist[1], &light->pos))
+		return (error_invalid(tokenlist, world));
 	if (!atof_with_error(tokenlist[2], BRIGHT_MAX, BRIGHT_MIN, &(brightness)))
 		error_invalid(tokenlist, world);
 	if (!token_to_color(tokenlist[3], &color))
