@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okaname <okaname@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dayano <dayano@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 22:21:43 by okaname           #+#    #+#             */
-/*   Updated: 2025/07/05 18:05:30 by okaname          ###   ########.fr       */
+/*   Updated: 2025/08/23 22:13:18 by dayano           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,26 @@ void	check_unset_obj(t_world *world)
 	}
 }
 
+void check_suffix(char *file, t_world *world)
+{
+	int	len;
+
+	len = ft_strlen(file);
+	if (len < 4 || file[len - 3] != '.' || file[len - 2] != 'r' || file[len - 1] != 't')
+	{
+		ft_putstr_fd("Error: Invalid file extension. Expected .rt\n", 2);
+		free_world(world);
+		exit(1);
+	}
+}
+
 int	parser(t_world *world, char *file)
 {
 	int		fd;
 	char	*line;
 	char	**lines;
 
+	check_suffix(file, world);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
@@ -94,6 +108,5 @@ int	parser(t_world *world, char *file)
 			make_obj(lines, world);
 		ft_free_array(lines);
 	}
-	check_unset_obj(world);
-	return (0);
+	return (check_unset_obj(world), 0);
 }
